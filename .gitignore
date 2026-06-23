@@ -3,6 +3,9 @@ build/
 *.pdf
 *.docx
 
+# static site (regenerate via scripts/build_site.py; deployed by CI)
+site/
+
 # python
 __pycache__/
 *.pyc

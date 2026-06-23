@@ -21,7 +21,9 @@ basket-economics model, and the code that builds them.
 | `memo/the-seventeen.md` | **The main memo.** Primer (Part 1), Investment Views + single-name thesis (Part 2), tailored framings (Part 3), sources & caveats. |
 | `model/basket-economics.xlsx` | **The supporting model.** Inputs → Calc → Sensitivity → Chart → Notes. Computes a basket value per tonne of rare-earth oxide and stress-tests it under a price-floor and an export-control-shock scenario. All figures illustrative until I input real data. |
 | `scripts/build_model.py` | Builds `model/basket-economics.xlsx` from scratch with `openpyxl` (fully formula-driven; re-run to regenerate). |
+| `scripts/build_site.py` | Renders the project into a static `site/` (styled memo + downloadable model) for GitHub Pages. |
 | `scripts/convert_memo.py` | Renders `memo/the-seventeen.md` to PDF / DOCX via `pandoc`. |
+| `.github/workflows/pages.yml` | CI: builds the site and deploys it to GitHub Pages on every push. |
 | `README.md` | This file. |
 
 ## Placeholder conventions
@@ -39,13 +41,26 @@ Find them all:
 grep -rno "\[\[\(MY VIEW\|VERIFY\|INPUT\)" memo/ README.md
 ```
 
+## Live site
+
+A browsable version is published to **GitHub Pages** and rebuilt on every push
+(see `.github/workflows/pages.yml`): the memo as a styled HTML page with the
+placeholders colour-coded, plus a download link for the model.
+
+> **URL:** `https://rishi-guntur.github.io/the-seventeen/`
+> (First deploy: if Pages isn't on yet, enable it once at **Settings → Pages →
+> Source: GitHub Actions**, then re-run the workflow.)
+
 ## Build / regenerate
 
 ```bash
 # 1. the model (requires: pip install openpyxl)
 python scripts/build_model.py            # -> model/basket-economics.xlsx
 
-# 2. the memo as PDF + DOCX (requires: pandoc, and a LaTeX engine for PDF)
+# 2. the static site, locally (requires: pip install markdown)
+python scripts/build_site.py             # -> site/index.html  (open in a browser)
+
+# 3. the memo as PDF + DOCX (requires: pandoc, and a LaTeX engine for PDF)
 python scripts/convert_memo.py           # -> build/the-seventeen.pdf, build/the-seventeen.docx
 ```
 
