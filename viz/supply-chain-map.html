@@ -24,19 +24,31 @@
     position:absolute; z-index:1000; background:rgba(255,255,255,.97);
     border:1px solid var(--rule); border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.08);
   }
-
-  #caption {
-    top:14px; left:14px; right:14px; max-width:640px; padding:14px 18px;
+  .panel-head {
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
   }
-  #caption h1 { font-size:16px; margin:0 0 4px; letter-spacing:-.01em; }
+  .panel-toggle {
+    flex:0 0 auto; width:22px; height:22px; border-radius:6px; border:1px solid var(--rule);
+    background:#f8fafc; color:var(--muted); font-size:13px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .panel-toggle:hover { background:#eef1f4; color:var(--ink); }
+  .panel.collapsed .panel-body { display:none; }
+  .panel.collapsed { padding-bottom: inherit; }
+
+  #caption { top:14px; left:14px; right:14px; max-width:640px; padding:14px 18px; }
+  #caption .panel-head { margin-bottom:4px; }
+  #caption.collapsed .panel-head { margin-bottom:0; }
+  #caption h1 { font-size:16px; margin:0; letter-spacing:-.01em; }
   #caption p { margin:0; color:var(--muted); font-size:12.5px; }
   #caption .takeaway { color:var(--ink); font-size:13.5px; margin-bottom:6px; }
   #caption .takeaway b { color:var(--sep); }
 
   #controls {
     top:14px; right:14px; width:230px; padding:12px 14px 14px; max-height:calc(100% - 28px);
-    overflow-y:auto;
+    display:flex; flex-direction:column;
   }
+  #controls .panel-body { overflow-y:auto; }
   #controls h2 { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);
                  margin:14px 0 6px; }
   #controls h2:first-child { margin-top:0; }
@@ -44,16 +56,19 @@
   #controls input[type=checkbox] { margin:0; accent-color:var(--sep); }
   #controls .swatch { width:11px; height:11px; border-radius:50%; display:inline-block; flex:0 0 auto; border:1px solid rgba(0,0,0,.15); }
   #controls .reset { font-size:12px; color:var(--sep); cursor:pointer; text-decoration:underline; background:none; border:none; padding:0; }
-  #controls .actions { display:flex; justify-content:space-between; margin-top:10px; }
+  #controls .actions { display:flex; align-items:center; gap:8px; }
+  #controls.collapsed { max-height:none; }
 
   #legend {
     bottom:14px; left:14px; padding:10px 14px; font-size:12px; max-width:320px;
   }
+  #legend .panel-head { margin-bottom:4px; }
+  #legend.collapsed .panel-head { margin-bottom:0; }
   #legend .row { display:flex; align-items:center; gap:7px; margin:3px 0; }
   #legend .swatch { width:11px; height:11px; border-radius:50%; flex:0 0 auto; border:1px solid rgba(0,0,0,.15); }
   #legend .swatch.big { width:15px; height:15px; }
   #legend .policy-badge { width:11px; height:11px; border-radius:50%; border:2px solid var(--policy); flex:0 0 auto; background:transparent; }
-  #legend .title { font-weight:600; margin-bottom:4px; }
+  #legend .title { font-weight:600; margin:0; }
 
   .leaflet-popup-content { font-size:13px; line-height:1.5; min-width:220px; }
   .leaflet-popup-content b.stage-tag { display:inline-block; font-size:10.5px; text-transform:uppercase; letter-spacing:.03em;
@@ -74,37 +89,51 @@
 <div id="map"></div>
 
 <div id="caption" class="panel">
-  <h1>The 17 — Global Supply Chain Map <span style="color:var(--muted); font-weight:400;">(illustrative)</span></h1>
-  <p class="takeaway">Midstream — separation and magnet-making — is <b>concentrated in China</b>; the Western build-out
-    is being driven by <b>policy</b> (export controls, price floors, government stakes), not geology.</p>
-  <p>Last updated: <span id="last-updated">—</span>. All locations, statuses, and policy tags are
-    best-effort placeholders — see each marker's <span class="verify">[[VERIFY]]</span> note. Do not treat as confirmed.</p>
+  <div class="panel-head">
+    <h1>The 17 — Global Supply Chain Map <span style="color:var(--muted); font-weight:400;">(illustrative)</span></h1>
+    <button class="panel-toggle" data-target="caption" aria-label="Minimize">&minus;</button>
+  </div>
+  <div class="panel-body">
+    <p class="takeaway">Midstream — separation and magnet-making — is <b>concentrated in China</b>; the Western build-out
+      is being driven by <b>policy</b> (export controls, price floors, government stakes), not geology.</p>
+    <p>Last updated: <span id="last-updated">—</span>. All locations, statuses, and policy tags are
+      best-effort placeholders — see each marker's <span class="verify">[[VERIFY]]</span> note. Do not treat as confirmed.</p>
+  </div>
 </div>
 
 <div id="controls" class="panel">
-  <div class="actions">
-    <strong style="font-size:12px;">Filters</strong>
-    <button class="reset" id="reset-filters">reset</button>
+  <div class="panel-head">
+    <div class="actions">
+      <strong style="font-size:12px;">Filters</strong>
+      <button class="reset" id="reset-filters">reset</button>
+    </div>
+    <button class="panel-toggle" data-target="controls" aria-label="Minimize">&minus;</button>
   </div>
+  <div class="panel-body">
+    <h2>Chain stage</h2>
+    <div id="stage-filters"></div>
 
-  <h2>Chain stage</h2>
-  <div id="stage-filters"></div>
+    <h2>Element</h2>
+    <div id="element-filters"></div>
 
-  <h2>Element</h2>
-  <div id="element-filters"></div>
-
-  <h2>Policy tag</h2>
-  <div id="policy-filters"></div>
+    <h2>Policy tag</h2>
+    <div id="policy-filters"></div>
+  </div>
 </div>
 
 <div id="legend" class="panel">
-  <div class="title">Legend</div>
-  <div class="row"><span class="swatch" style="background:var(--mine)"></span> Deposit / mine</div>
-  <div class="row"><span class="swatch big" style="background:var(--sep)"></span> Separation / refining (midstream)</div>
-  <div class="row"><span class="swatch" style="background:var(--metal)"></span> Metal / alloy</div>
-  <div class="row"><span class="swatch big" style="background:var(--magnet)"></span> Magnet (midstream)</div>
-  <div class="row"><span class="swatch" style="background:var(--recycle)"></span> Recycling</div>
-  <div class="row"><span class="policy-badge"></span> Blue ring = carries a policy tag (export control / price floor / govt stake / CRMA)</div>
+  <div class="panel-head">
+    <div class="title">Legend</div>
+    <button class="panel-toggle" data-target="legend" aria-label="Minimize">&minus;</button>
+  </div>
+  <div class="panel-body">
+    <div class="row"><span class="swatch" style="background:var(--mine)"></span> Deposit / mine</div>
+    <div class="row"><span class="swatch big" style="background:var(--sep)"></span> Separation / refining (midstream)</div>
+    <div class="row"><span class="swatch" style="background:var(--metal)"></span> Metal / alloy</div>
+    <div class="row"><span class="swatch big" style="background:var(--magnet)"></span> Magnet (midstream)</div>
+    <div class="row"><span class="swatch" style="background:var(--recycle)"></span> Recycling</div>
+    <div class="row"><span class="policy-badge"></span> Blue ring = carries a policy tag (export control / price floor / govt stake / CRMA)</div>
+  </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -136,6 +165,15 @@ const STAGE_LABEL = {
   "magnet": "Magnet",
   "recycling": "Recycling"
 };
+
+document.querySelectorAll('.panel-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const panel = document.getElementById(btn.dataset.target);
+    const collapsed = panel.classList.toggle('collapsed');
+    btn.textContent = collapsed ? '+' : '−';
+    btn.setAttribute('aria-label', collapsed ? 'Maximize' : 'Minimize');
+  });
+});
 
 const map = L.map('map', { worldCopyJump: true }).setView([20, 60], 2);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
