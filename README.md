@@ -20,6 +20,8 @@ basket-economics model, and the code that builds them.
 |---|---|
 | `memo/the-seventeen.md` | **The main memo.** Primer (Part 1), Investment Views + single-name thesis (Part 2), tailored framings (Part 3), sources & caveats. |
 | `model/basket-economics.xlsx` | **The supporting model.** Inputs → Calc → Sensitivity → Chart → Notes. Computes a basket value per tonne of rare-earth oxide and stress-tests it under a price-floor and an export-control-shock scenario. All figures illustrative until I input real data. |
+| `viz/supply-chain-map.html` | **Interactive supply-chain map.** Self-contained (Leaflet via CDN, no build step) — overlays physical assets (mine → separation → magnet → recycling) with the policy layer (export controls, price floors, govt stakes), filterable by stage / element / policy tag. Opens directly in a browser, or served as part of the site. |
+| `viz/data/assets.json` | Data behind the map — one object per asset (location, stage, status, elements, policy tags, notes). Edit this to update the map without touching code. All entries are illustrative pending `[[VERIFY]]`. |
 | `scripts/build_model.py` | Builds `model/basket-economics.xlsx` from scratch with `openpyxl` (fully formula-driven; re-run to regenerate). |
 | `scripts/build_site.py` | Renders the project into a static `site/` (styled memo + downloadable model) for GitHub Pages. |
 | `scripts/convert_memo.py` | Renders `memo/the-seventeen.md` to PDF / DOCX via `pandoc`. |

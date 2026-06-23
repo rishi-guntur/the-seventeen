@@ -40,6 +40,7 @@ ROOT = Path(__file__).resolve().parent.parent
 MEMO = ROOT / "memo" / "the-seventeen.md"
 MODEL = ROOT / "model" / "basket-economics.xlsx"
 README = ROOT / "README.md"
+VIZ_DIR = ROOT / "viz"
 
 # Match a full placeholder, including the surrounding ** bold markers if present,
 # across multiple lines. Captures the placeholder type for colour-coding.
@@ -167,7 +168,11 @@ def _render_markdown(md_path: Path) -> str:
         text,
         extensions=["extra", "tables", "sane_lists", "toc"],
     )
-    return _wrap_placeholders(body)
+    body = _wrap_placeholders(body)
+    # The memo links to ../viz/... (correct from memo/ in the repo); the site
+    # root flattens memo/ and viz/ as siblings, so rewrite the link to match.
+    body = body.replace('href="../viz/', 'href="viz/')
+    return body
 
 
 def _count_placeholders(md_path: Path) -> dict[str, int]:
@@ -198,6 +203,15 @@ def build(out_dir: Path) -> None:
     else:
         print(f"warning: {MODEL} not found — run scripts/build_model.py first")
 
+    # --- supply-chain map (standalone HTML + its data file) ---
+    if VIZ_DIR.exists():
+        out_viz = out_dir / "viz"
+        if out_viz.exists():
+            shutil.rmtree(out_viz)
+        shutil.copytree(VIZ_DIR, out_viz)
+    else:
+        print(f"warning: {VIZ_DIR} not found — skipping supply-chain map")
+
     # --- landing page ---
     counts = _count_placeholders(MEMO)
     total = sum(counts.values())
@@ -216,6 +230,12 @@ critical-minerals supply chain — written as an investment piece, not a survey.
   <h3>Download the model (.xlsx) &darr;</h3>
   <p>Basket-economics workbook: Inputs &rarr; Calc &rarr; Sensitivity &rarr; Chart &rarr; Notes.
      Computes basket value per tonne and stress-tests it. All figures illustrative until real data is entered.</p>
+</a>
+<a class="card" href="viz/supply-chain-map.html">
+  <h3>Supply-chain map &rarr;</h3>
+  <p>Interactive map overlaying physical assets (mine &rarr; separation &rarr; magnet) with the
+     policy layer (export controls, price floors, govt stakes). Filterable by stage, element,
+     and policy tag. All locations and statuses are illustrative pending verification.</p>
 </a>
 
 <h2>Placeholders still to fill in</h2>

@@ -62,6 +62,8 @@ This is the single most important primer fact for valuation work: **a deposit's 
 
 **Where the margin is:** broadly, *downstream of separation* — in separation, alloy, and magnets — not at the mine. The investable insight is that the market keeps funding the abundant link (mining) and under-funding the scarce links (separation/metal/magnet). [[MY VIEW: state whether you agree the margin pool is genuinely downstream and durable, or whether downstream margin is itself a policy artifact that compresses once capacity catches up.]]
 
+See the interactive **[supply-chain map](../viz/supply-chain-map.html)** for where each named asset sits on this chain and which carry a policy tag — it makes the China-midstream concentration and the policy-vs-geology point visually immediate.
+
 ### 1.4 Demand drivers and the "balance problem"
 
 **Demand drivers.** NdFeB magnet demand is the spine: EV traction motors, wind-turbine generators (especially direct-drive offshore), industrial automation / humanoid robotics, and defense (precision-guided munitions, radar, aircraft actuation). Adamas Intelligence and IEA both project NdPr-oxide demand growth running well ahead of GDP through the early 2030s, with magnet rare earths the tightest sub-segment (IEA, *Global Critical Minerals Outlook 2024/2025*; Adamas Intelligence magnet-market updates, 2024–2025). [[VERIFY: pull the latest specific NdPr demand-CAGR and any 2030 balance estimate — as of <date>; figures here are directional, not quoted.]]

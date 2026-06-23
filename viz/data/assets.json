@@ -1,0 +1,177 @@
+{
+  "meta": {
+    "title": "The 17 — Global Supply Chain Map (illustrative)",
+    "last_updated": "2026-06-23",
+    "disclaimer": "All locations, statuses, and policy tags are best-effort placeholders. Nothing here should be treated as confirmed — see each asset's notes field for [[VERIFY]] markers and the checklist printed alongside this file."
+  },
+  "assets": [
+    {
+      "name": "Mountain Pass",
+      "company": "MP Materials",
+      "country": "United States",
+      "lat": 35.4781,
+      "lng": -115.5347,
+      "chain_stage": "deposit/mine",
+      "status": "producing",
+      "elements": ["NdPr", "La", "Ce"],
+      "policy_tags": ["DoD price floor", "US govt equity stake"],
+      "notes": "Only integrated US mine; onsite separation + magnet ('Independence') facility ramping. [[VERIFY: status, output, and DoD/equity-stake terms — as of 2026-06-23]]"
+    },
+    {
+      "name": "Mountain Pass — Separation & Magnet (Independence/Fort Worth)",
+      "company": "MP Materials",
+      "country": "United States",
+      "lat": 32.7357,
+      "lng": -97.1081,
+      "chain_stage": "magnet",
+      "status": "construction",
+      "elements": ["NdPr"],
+      "policy_tags": ["DoD price floor", "US govt equity stake"],
+      "notes": "Fort Worth, TX magnet facility tied to MP Materials' DoD arrangement. [[VERIFY: location, capacity, status — as of 2026-06-23]]"
+    },
+    {
+      "name": "Mount Weld",
+      "company": "Lynas Rare Earths",
+      "country": "Australia",
+      "lat": -28.85,
+      "lng": 122.55,
+      "chain_stage": "deposit/mine",
+      "status": "producing",
+      "elements": ["NdPr", "Dy", "Tb"],
+      "policy_tags": ["CRMA-backed"],
+      "notes": "Concentrate produced near Laverton, WA; shipped to Malaysia for cracking/leaching. [[VERIFY: precise coordinates, current output — as of 2026-06-23]]"
+    },
+    {
+      "name": "LAMP (Lynas Advanced Materials Plant)",
+      "company": "Lynas Rare Earths",
+      "country": "Malaysia",
+      "lat": 3.98,
+      "lng": 103.42,
+      "chain_stage": "separation/refining",
+      "status": "producing",
+      "elements": ["NdPr", "Dy", "Tb"],
+      "policy_tags": [],
+      "notes": "Gebeng, Kuantan — largest separation plant outside China; heavy-REE circuit added. [[VERIFY: HRE separation status, capacity — as of 2026-06-23]]"
+    },
+    {
+      "name": "Round Top",
+      "company": "USA Rare Earth",
+      "country": "United States",
+      "lat": 31.17,
+      "lng": -105.35,
+      "chain_stage": "deposit/mine",
+      "status": "pre-commercial",
+      "elements": ["NdPr", "Dy", "Tb", "Sm"],
+      "policy_tags": [],
+      "notes": "Sierra Blanca, TX — heavy-REE-rich rhyolite deposit, pre-development. [[VERIFY: coordinates, permitting stage — as of 2026-06-23]]"
+    },
+    {
+      "name": "Stillwater Magnet Facility",
+      "company": "USA Rare Earth",
+      "country": "United States",
+      "lat": 45.5,
+      "lng": -109.5,
+      "chain_stage": "magnet",
+      "status": "construction",
+      "elements": ["NdPr"],
+      "policy_tags": ["US govt equity stake"],
+      "notes": "Stillwater County, MT magnet facility (sourced concentrate, not co-located with Round Top). [[VERIFY: exact site, capacity, status — as of 2026-06-23]]"
+    },
+    {
+      "name": "Serra Verde",
+      "company": "Serra Verde (private)",
+      "country": "Brazil",
+      "lat": -13.53,
+      "lng": -48.22,
+      "chain_stage": "deposit/mine",
+      "status": "producing",
+      "elements": ["NdPr", "Dy", "Tb"],
+      "policy_tags": [],
+      "notes": "Minaçu, Goiás — ionic clay deposit, first-of-kind outside Asia. [[VERIFY: coordinates, ramp status, offtake — as of 2026-06-23]]"
+    },
+    {
+      "name": "White Mesa Mill",
+      "company": "Energy Fuels",
+      "country": "United States",
+      "lat": 37.51,
+      "lng": -109.45,
+      "chain_stage": "separation/refining",
+      "status": "producing",
+      "elements": ["NdPr"],
+      "policy_tags": ["CRMA-backed"],
+      "notes": "Utah uranium mill repurposed for REE separation (monazite feedstock). [[VERIFY: current throughput, feedstock sourcing — as of 2026-06-23]]"
+    },
+    {
+      "name": "Bayan Obo",
+      "company": "Baogang / China Northern Rare Earth",
+      "country": "China",
+      "lat": 41.77,
+      "lng": 109.95,
+      "chain_stage": "deposit/mine",
+      "status": "producing",
+      "elements": ["NdPr", "La", "Ce"],
+      "policy_tags": ["China export control"],
+      "notes": "World's largest REE deposit by historical production (Inner Mongolia). [[VERIFY: current quota/output, export-control scope — as of 2026-06-23]]"
+    },
+    {
+      "name": "Ganzhou Separation Hub",
+      "company": "Various Chinese state-linked refiners",
+      "country": "China",
+      "lat": 25.83,
+      "lng": 114.93,
+      "chain_stage": "separation/refining",
+      "status": "producing",
+      "elements": ["Dy", "Tb", "NdPr"],
+      "policy_tags": ["China export control"],
+      "notes": "Jiangxi — center of China's heavy-REE (ionic clay) separation capacity. [[VERIFY: named entities, capacity, control-list specifics — as of 2026-06-23]]"
+    },
+    {
+      "name": "Baotou Magnet/Alloy Cluster",
+      "company": "Various Chinese state-linked producers",
+      "country": "China",
+      "lat": 40.66,
+      "lng": 109.84,
+      "chain_stage": "magnet",
+      "status": "producing",
+      "elements": ["NdPr", "Dy", "Tb"],
+      "policy_tags": ["China export control"],
+      "notes": "Inner Mongolia magnet/alloy cluster downstream of Bayan Obo. [[VERIFY: named entities, capacity share of global magnet output — as of 2026-06-23]]"
+    },
+    {
+      "name": "Caremag (Lacq)",
+      "company": "Carester",
+      "country": "France",
+      "lat": 43.41,
+      "lng": -0.63,
+      "chain_stage": "separation/refining",
+      "status": "construction",
+      "elements": ["NdPr", "Dy", "Tb"],
+      "policy_tags": ["CRMA-backed"],
+      "notes": "Planned EU heavy/light separation plant at Lacq — first of its kind in Europe. [[VERIFY: coordinates, timeline, funding — as of 2026-06-23]]"
+    },
+    {
+      "name": "Eneabba",
+      "company": "Iluka Resources",
+      "country": "Australia",
+      "lat": -29.83,
+      "lng": 115.27,
+      "chain_stage": "separation/refining",
+      "status": "construction",
+      "elements": ["NdPr", "Dy", "Tb"],
+      "policy_tags": ["CRMA-backed"],
+      "notes": "Refinery built on mineral-sands monazite stockpile; backed by Australian govt loan. [[VERIFY: status, capacity, govt-loan terms — as of 2026-06-23]]"
+    },
+    {
+      "name": "Nolans",
+      "company": "Arafura Rare Earths",
+      "country": "Australia",
+      "lat": -22.93,
+      "lng": 133.20,
+      "chain_stage": "deposit/mine",
+      "status": "pre-commercial",
+      "elements": ["NdPr"],
+      "policy_tags": ["CRMA-backed"],
+      "notes": "Northern Territory — integrated mine-to-oxide project, financing-dependent. [[VERIFY: financing status, coordinates — as of 2026-06-23]]"
+    }
+  ]
+}

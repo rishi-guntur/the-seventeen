@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 17 — Supply Chain Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+  :root {
+    --ink:#1a1a1a; --muted:#5b6470; --rule:#e4e7eb; --bg:#ffffff;
+    --mine:#8a8d91;        /* deposit/mine — neutral grey */
+    --sep:#b91c1c;         /* separation/refining — dominant red */
+    --metal:#c2410c;       /* metal/alloy — orange */
+    --magnet:#7c1d1d;      /* magnet — deep red, most dominant */
+    --recycle:#15803d;     /* recycling — green */
+    --policy:#1d4ed8;      /* policy badge ring */
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; font:14px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; color:var(--ink); }
+  #map { position:absolute; inset:0; }
+
+  .panel {
+    position:absolute; z-index:1000; background:rgba(255,255,255,.97);
+    border:1px solid var(--rule); border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.08);
+  }
+
+  #caption {
+    top:14px; left:14px; right:14px; max-width:640px; padding:14px 18px;
+  }
+  #caption h1 { font-size:16px; margin:0 0 4px; letter-spacing:-.01em; }
+  #caption p { margin:0; color:var(--muted); font-size:12.5px; }
+  #caption .takeaway { color:var(--ink); font-size:13.5px; margin-bottom:6px; }
+  #caption .takeaway b { color:var(--sep); }
+
+  #controls {
+    top:14px; right:14px; width:230px; padding:12px 14px 14px; max-height:calc(100% - 28px);
+    overflow-y:auto;
+  }
+  #controls h2 { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);
+                 margin:14px 0 6px; }
+  #controls h2:first-child { margin-top:0; }
+  #controls label { display:flex; align-items:center; gap:7px; font-size:13px; margin:4px 0; cursor:pointer; }
+  #controls input[type=checkbox] { margin:0; accent-color:var(--sep); }
+  #controls .swatch { width:11px; height:11px; border-radius:50%; display:inline-block; flex:0 0 auto; border:1px solid rgba(0,0,0,.15); }
+  #controls .reset { font-size:12px; color:var(--sep); cursor:pointer; text-decoration:underline; background:none; border:none; padding:0; }
+  #controls .actions { display:flex; justify-content:space-between; margin-top:10px; }
+
+  #legend {
+    bottom:14px; left:14px; padding:10px 14px; font-size:12px; max-width:320px;
+  }
+  #legend .row { display:flex; align-items:center; gap:7px; margin:3px 0; }
+  #legend .swatch { width:11px; height:11px; border-radius:50%; flex:0 0 auto; border:1px solid rgba(0,0,0,.15); }
+  #legend .swatch.big { width:15px; height:15px; }
+  #legend .policy-badge { width:11px; height:11px; border-radius:50%; border:2px solid var(--policy); flex:0 0 auto; background:transparent; }
+  #legend .title { font-weight:600; margin-bottom:4px; }
+
+  .leaflet-popup-content { font-size:13px; line-height:1.5; min-width:220px; }
+  .leaflet-popup-content b.stage-tag { display:inline-block; font-size:10.5px; text-transform:uppercase; letter-spacing:.03em;
+        padding:1px 6px; border-radius:4px; color:#fff; margin-bottom:4px; }
+  .popup-policy { display:inline-block; font-size:11px; background:#eff6ff; color:var(--policy);
+        border:1px solid #bfdbfe; border-radius:4px; padding:1px 6px; margin:2px 3px 0 0; }
+  .popup-note { color:var(--muted); font-size:12px; margin-top:6px; }
+  .verify { color:#b45309; font-weight:600; }
+
+  @media (max-width: 640px) {
+    #controls { width:62vw; }
+    #caption { max-width:80vw; }
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="caption" class="panel">
+  <h1>The 17 — Global Supply Chain Map <span style="color:var(--muted); font-weight:400;">(illustrative)</span></h1>
+  <p class="takeaway">Midstream — separation and magnet-making — is <b>concentrated in China</b>; the Western build-out
+    is being driven by <b>policy</b> (export controls, price floors, government stakes), not geology.</p>
+  <p>Last updated: <span id="last-updated">—</span>. All locations, statuses, and policy tags are
+    best-effort placeholders — see each marker's <span class="verify">[[VERIFY]]</span> note. Do not treat as confirmed.</p>
+</div>
+
+<div id="controls" class="panel">
+  <div class="actions">
+    <strong style="font-size:12px;">Filters</strong>
+    <button class="reset" id="reset-filters">reset</button>
+  </div>
+
+  <h2>Chain stage</h2>
+  <div id="stage-filters"></div>
+
+  <h2>Element</h2>
+  <div id="element-filters"></div>
+
+  <h2>Policy tag</h2>
+  <div id="policy-filters"></div>
+</div>
+
+<div id="legend" class="panel">
+  <div class="title">Legend</div>
+  <div class="row"><span class="swatch" style="background:var(--mine)"></span> Deposit / mine</div>
+  <div class="row"><span class="swatch big" style="background:var(--sep)"></span> Separation / refining (midstream)</div>
+  <div class="row"><span class="swatch" style="background:var(--metal)"></span> Metal / alloy</div>
+  <div class="row"><span class="swatch big" style="background:var(--magnet)"></span> Magnet (midstream)</div>
+  <div class="row"><span class="swatch" style="background:var(--recycle)"></span> Recycling</div>
+  <div class="row"><span class="policy-badge"></span> Blue ring = carries a policy tag (export control / price floor / govt stake / CRMA)</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const STAGE_COLOR = {
+  "deposit/mine": "var(--mine)",
+  "separation/refining": "var(--sep)",
+  "metal/alloy": "var(--metal)",
+  "magnet": "var(--magnet)",
+  "recycling": "var(--recycle)"
+};
+// resolved hex (CSS vars don't work inside Leaflet's inline SVG/divIcon styles reliably in all browsers, so resolve at runtime)
+function resolveColor(varExpr) {
+  const v = varExpr.match(/--([a-z]+)/)[1];
+  return getComputedStyle(document.documentElement).getPropertyValue('--' + v).trim();
+}
+const STAGE_RADIUS = {
+  "deposit/mine": 7,
+  "separation/refining": 11,
+  "metal/alloy": 8,
+  "magnet": 12,
+  "recycling": 7
+};
+const STAGE_LABEL = {
+  "deposit/mine": "Deposit / mine",
+  "separation/refining": "Separation / refining",
+  "metal/alloy": "Metal / alloy",
+  "magnet": "Magnet",
+  "recycling": "Recycling"
+};
+
+const map = L.map('map', { worldCopyJump: true }).setView([20, 60], 2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors',
+  maxZoom: 12
+}).addTo(map);
+
+let allAssets = [];
+let markers = []; // { asset, layer }
+
+const state = { stages: new Set(), elements: new Set(), policies: new Set() };
+
+function uniqueSorted(arr) { return [...new Set(arr)].sort(); }
+
+function buildFilterPanel(containerId, values, set, onChange, swatchColor) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  values.forEach(v => {
+    set.add(v);
+    const id = containerId + '-' + v.replace(/[^a-z0-9]+/gi, '_');
+    const label = document.createElement('label');
+    const swatch = swatchColor
+      ? `<span class="swatch" style="background:${swatchColor(v)}"></span>`
+      : '';
+    label.innerHTML = `<input type="checkbox" id="${id}" checked> ${swatch}<span>${v}</span>`;
+    label.querySelector('input').addEventListener('change', (e) => {
+      if (e.target.checked) set.add(v); else set.delete(v);
+      onChange();
+    });
+    el.appendChild(label);
+  });
+}
+
+function makeIcon(asset) {
+  const color = resolveColor(STAGE_COLOR[asset.chain_stage] || "var(--mine)");
+  const r = STAGE_RADIUS[asset.chain_stage] || 7;
+  const hasPolicy = asset.policy_tags && asset.policy_tags.length > 0;
+  const ring = hasPolicy ? `box-shadow:0 0 0 2.5px ${resolveColor('var(--policy)')};` : '';
+  const size = r * 2 + 6;
+  const html = `<div style="
+        width:${size}px; height:${size}px; border-radius:50%;
+        background:${color}; border:1.5px solid rgba(0,0,0,.25);
+        ${ring} display:flex; align-items:center; justify-content:center;
+      "></div>`;
+  return L.divIcon({ html, className: '', iconSize: [size, size], iconAnchor: [size/2, size/2] });
+}
+
+function popupHtml(asset) {
+  const color = resolveColor(STAGE_COLOR[asset.chain_stage] || "var(--mine)");
+  const tags = (asset.policy_tags || [])
+    .map(t => `<span class="popup-policy">${t}</span>`).join('');
+  const elements = (asset.elements || []).join(', ');
+  return `
+    <b class="stage-tag" style="background:${color}">${STAGE_LABEL[asset.chain_stage] || asset.chain_stage}</b><br>
+    <strong>${asset.name}</strong><br>
+    <span style="color:var(--muted)">${asset.company} — ${asset.country}</span><br>
+    <div style="margin-top:6px;"><strong>Status:</strong> ${asset.status}</div>
+    <div><strong>Elements:</strong> ${elements || '—'}</div>
+    ${tags ? `<div style="margin-top:4px;">${tags}</div>` : ''}
+    <div class="popup-note">${asset.notes || ''}</div>
+  `;
+}
+
+function applyFilters() {
+  markers.forEach(({ asset, layer }) => {
+    const stageOk = state.stages.has(asset.chain_stage);
+    const elementOk = !asset.elements || asset.elements.length === 0 ||
+      asset.elements.some(e => state.elements.has(e));
+    const policyOk = !asset.policy_tags || asset.policy_tags.length === 0 ||
+      asset.policy_tags.some(p => state.policies.has(p)) ||
+      // assets with no policy tags should still show unless every policy filter is explicitly used to isolate
+      asset.policy_tags.length === 0;
+    const visible = stageOk && elementOk && policyOk;
+    if (visible) { if (!map.hasLayer(layer)) layer.addTo(map); }
+    else { if (map.hasLayer(layer)) map.removeLayer(layer); }
+  });
+}
+
+// Policy filter needs special handling: if an asset has NO policy tags, it should
+// remain visible regardless of policy filter state (policy is an overlay, not exclusionary
+// for assets that simply don't carry any tag) — handled above via the OR clause.
+
+fetch('data/assets.json')
+  .then(r => r.json())
+  .then(data => {
+    allAssets = data.assets;
+    document.getElementById('last-updated').textContent = data.meta.last_updated;
+
+    const stages = ["deposit/mine", "separation/refining", "metal/alloy", "magnet", "recycling"]
+      .filter(s => allAssets.some(a => a.chain_stage === s));
+    const elements = uniqueSorted(allAssets.flatMap(a => a.elements || []));
+    const policies = uniqueSorted(allAssets.flatMap(a => a.policy_tags || []));
+
+    buildFilterPanel('stage-filters', stages, state.stages, applyFilters,
+      (s) => resolveColor(STAGE_COLOR[s] || "var(--mine)"));
+    buildFilterPanel('element-filters', elements, state.elements, applyFilters);
+    buildFilterPanel('policy-filters', policies, state.policies, applyFilters);
+
+    allAssets.forEach(asset => {
+      const layer = L.marker([asset.lat, asset.lng], { icon: makeIcon(asset) })
+        .bindPopup(popupHtml(asset));
+      markers.push({ asset, layer });
+      layer.addTo(map);
+    });
+
+    document.getElementById('reset-filters').addEventListener('click', () => {
+      document.querySelectorAll('#controls input[type=checkbox]').forEach(cb => cb.checked = true);
+      state.stages = new Set(stages);
+      state.elements = new Set(elements);
+      state.policies = new Set(policies);
+      applyFilters();
+    });
+  })
+  .catch(err => {
+    document.getElementById('caption').innerHTML +=
+      `<p style="color:#b91c1c; margin-top:6px;">Could not load data/assets.json (${err}). Open this file via a local server (not file://) if your browser blocks local fetch, e.g. <code>python -m http.server</code> from the viz/ folder.</p>`;
+  });
+</script>
+</body>
+</html>
