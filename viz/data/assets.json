@@ -2,7 +2,8 @@
   "meta": {
     "title": "The 17 — Global Supply Chain Map (illustrative)",
     "last_updated": "2026-06-23",
-    "disclaimer": "All locations, statuses, and policy tags are best-effort placeholders. Nothing here should be treated as confirmed — see each asset's notes field for [[VERIFY]] markers and the checklist printed alongside this file."
+    "disclaimer": "All locations, statuses, and policy tags are best-effort placeholders. Nothing here should be treated as confirmed — see each asset's notes field for [[VERIFY]] markers and the checklist printed alongside this file.",
+    "capacity_note": "[[INPUT]] Optional per-asset field 'capacity_tpa' (tonnes/year REO-equivalent). When set, the map scales marker size by capacity; when absent, markers default to stage-based sizing. Add real capacities from company filings before presenting."
   },
   "assets": [
     {

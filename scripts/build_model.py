@@ -42,11 +42,20 @@ PLACEHOLDER = "FFF3CD"      # soft amber = "you must fill this in"
 ACCENT = "2E6DB4"
 WHITE = "FFFFFF"
 
+# Street conventions: hardcoded inputs = BLUE, formulas = BLACK,
+# links to other tabs = GREEN.
+INPUT_BLUE = "0000C0"
+FORMULA_BLACK = "1A1A1A"
+LINK_GREEN = "007B3A"
+
 TITLE_FONT = Font(name="Calibri", size=14, bold=True, color=WHITE)
 HEAD_FONT = Font(name="Calibri", size=11, bold=True, color=WHITE)
-BODY_FONT = Font(name="Calibri", size=11, color="1A1A1A")
+BODY_FONT = Font(name="Calibri", size=11, color=FORMULA_BLACK)
 NOTE_FONT = Font(name="Calibri", size=10, italic=True, color="555555")
-PLACEHOLDER_FONT = Font(name="Calibri", size=11, bold=True, color="8A6D00")
+# Blue (Street convention for hardcodes) on the amber "fill me in" fill.
+PLACEHOLDER_FONT = Font(name="Calibri", size=11, bold=True, color=INPUT_BLUE)
+FORMULA_FONT = Font(name="Calibri", size=11, color=FORMULA_BLACK)
+LINK_FONT = Font(name="Calibri", size=11, color=LINK_GREEN)
 
 TITLE_FILL = PatternFill("solid", fgColor=NAVY)
 HEAD_FILL = PatternFill("solid", fgColor=SLATE)
@@ -54,7 +63,10 @@ LIGHT_FILL = PatternFill("solid", fgColor=LIGHT)
 PLACEHOLDER_FILL = PatternFill("solid", fgColor=PLACEHOLDER)
 
 THIN = Side(style="thin", color="BFC7D5")
+DOUBLE = Side(style="double", color=NAVY)
 BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
+# Output rows: single rule above, double rule below (Street convention).
+TOTAL_BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=DOUBLE)
 CENTER = Alignment(horizontal="center", vertical="center", wrap_text=True)
 LEFT = Alignment(horizontal="left", vertical="center", wrap_text=True)
 RIGHT = Alignment(horizontal="right", vertical="center")
@@ -204,17 +216,21 @@ def build_calc(ws, ix):
     out_first = hrow + 1
     for i, src in enumerate(range(first, last + 1)):
         r = out_first + i
-        ws.cell(row=r, column=1, value=f"=Inputs!A{src}").font = BODY_FONT
-        ws.cell(row=r, column=2, value=f"=Inputs!C{src}").font = BODY_FONT
+        ws.cell(row=r, column=1, value=f"=Inputs!A{src}").font = LINK_FONT
+        ws.cell(row=r, column=2, value=f"=Inputs!C{src}").font = LINK_FONT
         pc = ws.cell(row=r, column=3, value=f"=Inputs!D{src}")
         pc.number_format = "0.00%"
+        pc.font = LINK_FONT
         prc = ws.cell(row=r, column=4, value=f"=Inputs!F{src}")
         prc.number_format = '"$"#,##0.00'
+        prc.font = LINK_FONT
         kg = ws.cell(row=r, column=5, value=f"=C{r}*1000")
         kg.number_format = "#,##0.0"
+        kg.font = FORMULA_FONT
         val = ws.cell(row=r, column=6, value=f"=E{r}*D{r}")
         val.number_format = '"$"#,##0'
-        ws.cell(row=r, column=8, value=f"=Inputs!G{src}").font = BODY_FONT
+        val.font = FORMULA_FONT
+        ws.cell(row=r, column=8, value=f"=Inputs!G{src}").font = LINK_FONT
         for col in range(1, 9):
             ws.cell(row=r, column=col).border = BORDER
 
@@ -227,12 +243,13 @@ def build_calc(ws, ix):
     tv.font = Font(bold=True, size=12, color=NAVY)
     tv.number_format = '"$"#,##0'
     tv.fill = LIGHT_FILL
-    tv.border = BORDER
+    tv.border = TOTAL_BORDER
 
     # % contribution column references the headline total
     for r in range(out_first, out_last + 1):
         pcell = ws.cell(row=r, column=7, value=f"=F{r}/$F${total_row}")
         pcell.number_format = "0.0%"
+        pcell.font = FORMULA_FONT
         pcell.border = BORDER
 
     # magnet-element share callout
@@ -299,11 +316,12 @@ def build_sensitivity(ws, calc):
     out_first = hrow + 1
     for i, src in enumerate(range(first, last + 1)):
         r = out_first + i
-        ws.cell(row=r, column=1, value=f"=Calc!A{src}").font = BODY_FONT
+        ws.cell(row=r, column=1, value=f"=Calc!A{src}").font = LINK_FONT
         grp = f"Calc!B{src}"
-        ws.cell(row=r, column=2, value=f"={grp}").font = BODY_FONT
+        ws.cell(row=r, column=2, value=f"={grp}").font = LINK_FONT
         base = ws.cell(row=r, column=3, value=f"=Calc!F{src}")
         base.number_format = '"$"#,##0'
+        base.font = LINK_FONT
         is_heavy = f'ISNUMBER(SEARCH("Heavy",Calc!B{src}))'
         # match the element symbol in parentheses, e.g. "(Nd)"/"(Pr)", so
         # "Promethium (Pm)" is not mis-caught by a bare "Pr" search.
@@ -314,13 +332,15 @@ def build_sensitivity(ws, calc):
             row=r, column=4,
             value=f"=Calc!F{src}*IF({is_ndpr},$ {floor_cell},1)".replace(" ", ""))
         floor.number_format = '"$"#,##0'
+        floor.font = FORMULA_FONT
         # Shock: heavies × heavy mult, NdPr × ndpr mult, else base
         shock = ws.cell(
             row=r, column=5,
             value=(f"=Calc!F{src}*IF({is_ndpr},${ndpr_cell},"
                    f"IF({is_heavy},${heavy_cell},1))"))
         shock.number_format = '"$"#,##0'
-        ws.cell(row=r, column=6, value=f"=Calc!H{src}").font = BODY_FONT
+        shock.font = FORMULA_FONT
+        ws.cell(row=r, column=6, value=f"=Calc!H{src}").font = LINK_FONT
         for col in range(1, 7):
             ws.cell(row=r, column=col).border = BORDER
 
@@ -333,7 +353,7 @@ def build_sensitivity(ws, calc):
         t.font = Font(bold=True, size=12, color=NAVY)
         t.number_format = '"$"#,##0'
         t.fill = LIGHT_FILL
-        t.border = BORDER
+        t.border = TOTAL_BORDER
 
     # uplift line
     urow = trow + 1
@@ -347,6 +367,112 @@ def build_sensitivity(ws, calc):
     widths = [24, 16, 14, 16, 18, 14]
     for j, w in enumerate(widths, start=1):
         ws.column_dimensions[get_column_letter(j)].width = w
+
+    return {"total_row": trow, "uplift_row": urow}
+
+
+def build_summary(ws, calc, sens):
+    """Cover / dashboard tab: title, TOC, key-outputs block, sensitivity chart."""
+    ncols = 5
+    _title_row(
+        ws, "THE 17 — BASKET-ECONOMICS MODEL", ncols,
+        subtitle=(f"Rare-earth basket value per tonne of mixed REO, with "
+                  f"price-floor and export-control-shock scenarios. "
+                  f"Prepared {date.today().isoformat()}. ALL FIGURES "
+                  f"ILLUSTRATIVE until Inputs are replaced with real data — "
+                  f"see Notes tab."),
+    )
+
+    # --- Table of contents ---
+    r = 4
+    ws.cell(row=r, column=1, value="TABLE OF CONTENTS").font = Font(
+        name="Calibri", size=11, bold=True, color=NAVY)
+    toc = [
+        ("Summary", "This dashboard — key outputs & sensitivity chart."),
+        ("Inputs", "Deposit % by oxide + oxide prices. BLUE cells = hardcoded "
+                   "inputs to replace."),
+        ("Calc", "Weighted basket value / tonne REO; % contribution by element."),
+        ("Sensitivity", "Price-floor & export-control-shock scenarios."),
+        ("Chart", "% contribution to basket value by element."),
+        ("Notes", "Read me — conventions, caveats, fill-in checklist."),
+    ]
+    for i, (tab, desc) in enumerate(toc):
+        rr = r + 1 + i
+        t = ws.cell(row=rr, column=1, value=tab)
+        t.font = Font(name="Calibri", size=11, bold=True, color=ACCENT)
+        ws.cell(row=rr, column=2, value=desc).font = NOTE_FONT
+        ws.merge_cells(start_row=rr, start_column=2, end_row=rr, end_column=ncols)
+
+    # --- Key outputs block ---
+    kr = r + len(toc) + 3
+    ws.cell(row=kr, column=1, value="KEY OUTPUTS").font = Font(
+        name="Calibri", size=11, bold=True, color=NAVY)
+    ct = calc["total_row"]
+    st = sens["total_row"]
+    su = sens["uplift_row"]
+    outputs = [
+        ("Basket value / tonne REO (base)", f"=Calc!F{ct}", '"$"#,##0'),
+        ("Basket value / tonne (price-floor scenario)", f"=Sensitivity!D{st}", '"$"#,##0'),
+        ("Basket value / tonne (export-control shock)", f"=Sensitivity!E{st}", '"$"#,##0'),
+        ("Uplift vs base — floor", f"=Sensitivity!D{su}", "+0.0%;-0.0%"),
+        ("Uplift vs base — shock", f"=Sensitivity!E{su}", "+0.0%;-0.0%"),
+        ("Magnet elements (NdPr+Dy+Tb) share of basket value",
+         f"=Calc!F{ct + 2}", "0.0%"),
+    ]
+    for i, (label, formula, fmt) in enumerate(outputs):
+        rr = kr + 1 + i
+        lc = ws.cell(row=rr, column=1, value=label)
+        lc.font = BODY_FONT
+        lc.border = BORDER
+        ws.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=3)
+        for cc in range(1, 4):
+            ws.cell(row=rr, column=cc).border = BORDER
+        v = ws.cell(row=rr, column=4, value=formula)
+        v.font = Font(name="Calibri", size=11, bold=True, color=LINK_GREEN)
+        v.number_format = fmt
+        v.alignment = RIGHT
+        v.border = TOTAL_BORDER if i == 0 else BORDER
+        v.fill = LIGHT_FILL
+    ws.cell(row=kr + len(outputs) + 1, column=1,
+            value="Green = pulled live from other tabs. Headline row "
+                  "double-underlined. Figures illustrative until Inputs are real."
+            ).font = NOTE_FONT
+
+    # --- Sensitivity chart (native Excel) ---
+    dr = kr + len(outputs) + 3
+    ws.cell(row=dr, column=1, value="Scenario").font = HEAD_FONT
+    ws.cell(row=dr, column=1).fill = HEAD_FILL
+    ws.cell(row=dr, column=2, value="Basket value USD/tonne").font = HEAD_FONT
+    ws.cell(row=dr, column=2).fill = HEAD_FILL
+    scen = [("Base", f"=Calc!F{ct}"),
+            ("Price floor", f"=Sensitivity!D{st}"),
+            ("Export-control shock", f"=Sensitivity!E{st}")]
+    for i, (label, formula) in enumerate(scen):
+        rr = dr + 1 + i
+        ws.cell(row=rr, column=1, value=label).font = BODY_FONT
+        v = ws.cell(row=rr, column=2, value=formula)
+        v.font = LINK_FONT
+        v.number_format = '"$"#,##0'
+
+    chart = BarChart()
+    chart.type = "col"
+    chart.style = 10
+    chart.title = "Basket value / tonne REO by scenario (illustrative)"
+    chart.y_axis.title = "USD / tonne"
+    chart.y_axis.numFmt = '"$"#,##0'
+    data = Reference(ws, min_col=2, min_row=dr, max_row=dr + len(scen))
+    cats = Reference(ws, min_col=1, min_row=dr + 1, max_row=dr + len(scen))
+    chart.add_data(data, titles_from_data=True)
+    chart.set_categories(cats)
+    chart.height = 9
+    chart.width = 16
+    chart.legend = None
+    ws.add_chart(chart, f"F{kr}")
+
+    widths = [40, 26, 8, 18, 4]
+    for j, w in enumerate(widths, start=1):
+        ws.column_dimensions[get_column_letter(j)].width = w
+    ws.sheet_view.showGridLines = False
 
 
 def build_chart_sheet(ws, calc):
@@ -411,6 +537,12 @@ def build_notes(ws):
         "contribution) → Sensitivity (floor & export-control scenarios) → Chart.",
         "Everything is formula-linked: change Inputs and the rest updates.",
         "",
+        "Color conventions (Street standard):",
+        "  BLUE text = hardcoded input (yours to change; amber fill = must fill in).",
+        "  BLACK text = formula within the tab. Do not overwrite.",
+        "  GREEN text = link pulling from another tab. Do not overwrite.",
+        "  Double-underlined rows = final outputs (basket value / tonne).",
+        "",
         "Headline number to quote in the memo: Calc!F<total row> "
         "(BASKET VALUE / TONNE REO). It is illustrative until step 1–3 are done.",
         "",
@@ -440,8 +572,9 @@ def main():
     args = parser.parse_args()
 
     wb = Workbook()
-    ws_inputs = wb.active
-    ws_inputs.title = "Inputs"
+    ws_summary = wb.active
+    ws_summary.title = "Summary"
+    ws_inputs = wb.create_sheet("Inputs")
     ws_calc = wb.create_sheet("Calc")
     ws_sens = wb.create_sheet("Sensitivity")
     ws_chart = wb.create_sheet("Chart")
@@ -449,7 +582,8 @@ def main():
 
     ix = build_inputs(ws_inputs)
     calc = build_calc(ws_calc, ix)
-    build_sensitivity(ws_sens, calc)
+    sens = build_sensitivity(ws_sens, calc)
+    build_summary(ws_summary, calc, sens)
     build_chart_sheet(ws_chart, calc)
     build_notes(ws_notes)
 

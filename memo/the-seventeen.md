@@ -15,7 +15,11 @@
 
 ## Executive Summary
 
-**[[MY VIEW: 3–4 conclusions, written last. State the single sharpest claim first (the thing I believe that the market does not yet price). Then: (i) where in the value chain the asymmetry sits, (ii) the one catalyst that forces a re-rate and roughly when, (iii) the single name (or pair) I would express it through and the one risk that would make me wrong. Keep to ~150 words; this is the only thing a busy reader is guaranteed to read.]]**
+**The Situation.** Rare-earth magnet demand (EVs, wind, robotics, defense) is growing well ahead of GDP while the midstream of the supply chain — separation, metal/alloy, magnet-making — remains overwhelmingly concentrated in China. Western governments have responded with the most aggressive industrial policy in the metals complex: export-control countermeasures, price floors, direct equity stakes, and offtake vehicles (§1.6).
+
+**The Complication.** Western capital keeps funding the abundant link (mining) while the scarce links (separation → magnet) stay structurally short outside China. Pricing is opaque and two-regime, and the policy scaffolding that underwrites Western economics has explicit expiry/renewal dates — most notably the ~Nov 2026 export-control window — so the investable question is not geology but the durability and pricing of the policy layer (§1.3, §1.5–1.6).
+
+**The Resolution.** **[[MY VIEW: 3–4 conclusions, written last. State the single sharpest claim first (the thing I believe that the market does not yet price). Then: (i) where in the value chain the asymmetry sits, (ii) the one catalyst that forces a re-rate and roughly when, (iii) the single name (or pair) I would express it through and the one risk that would make me wrong. Keep to ~150 words; this is the only thing a busy reader is guaranteed to read.]]**
 
 ---
 
@@ -25,7 +29,7 @@
 
 ### 1.1 The 17 elements, at group level
 
-"Rare earths" are the 15 lanthanides plus scandium and yttrium — 17 elements that sit together because their chemistry is nearly interchangeable, which is exactly why separating them is hard and value-additive. They are not geologically rare; they are *dispersed*, rarely concentrated enough to mine economically, and almost never found apart from one another (USGS, *Mineral Commodity Summaries 2025*, Rare Earths chapter, Jan 2025).
+"Rare earths" are the 15 lanthanides plus scandium and yttrium — 17 elements that sit together because their chemistry is nearly interchangeable, which is exactly why separating them is hard and value-additive. They are not geologically rare; they are *dispersed*, rarely concentrated enough to mine economically, and almost never found apart from one another.[^1]
 
 The economically meaningful split is **light (LREE)** vs **heavy (HREE)**:
 
@@ -42,6 +46,8 @@ The defining feature of this market is that **value is concentrated in a handful
 - **Dy and Tb** are the *heavy* magnet additives — added in small percentages to raise the magnet's coercivity so it holds its field at high operating temperatures (EV traction motors, defense). Tiny mass fraction, outsized value and outsized supply risk, because heavies are the most China- and Myanmar-concentrated part of the chain.
 - **Sm** matters for one specific, underappreciated reason: **samarium-cobalt (SmCo) magnets**, which tolerate much higher temperatures and are the default in defense/aerospace (missiles, jet actuators) where NdFeB would demagnetize. Sm is otherwise a low-value light. China's inclusion of samarium in its April 2025 export-control list (below) is a tell that the defense angle is understood by Beijing.
 - **The rest** — La, Ce, and most of the other heavies (Gd, Ho, Er, Tm, Yb, Lu, Eu, Y) — matter *less* to the equity story. They have real industrial uses (catalysts, polishing, phosphors, batteries) but trade cheaply, are frequently in surplus, and in a hard-rock basket are closer to a disposal cost than a revenue line. **The "balance problem" (§1.4) is precisely the problem of being forced to produce these to get at the NdPr.**
+
+> **Metallurgical context.** NdPr typically accounts for only ~15–25% of a light rare-earth deposit by mass but drives the large majority of its economic value, because permanent-magnet demand sets the price of the NdPr fraction while the La/Ce bulk trades near (or below) cost of production. **[[VERIFY: exact mass/value split for the deposit(s) actually cited — run it through the model — as of <date>.]]**
 
 This is the single most important primer fact for valuation work: **a deposit's grade headline is close to meaningless; the element *split* and the realized price on the NdPr/Dy/Tb fraction is what determines basket economics.** The model in `/model/basket-economics.xlsx` is built around exactly this.
 
@@ -66,7 +72,7 @@ See the interactive **[supply-chain map](../viz/supply-chain-map.html)** for whe
 
 ### 1.4 Demand drivers and the "balance problem"
 
-**Demand drivers.** NdFeB magnet demand is the spine: EV traction motors, wind-turbine generators (especially direct-drive offshore), industrial automation / humanoid robotics, and defense (precision-guided munitions, radar, aircraft actuation). Adamas Intelligence and IEA both project NdPr-oxide demand growth running well ahead of GDP through the early 2030s, with magnet rare earths the tightest sub-segment (IEA, *Global Critical Minerals Outlook 2024/2025*; Adamas Intelligence magnet-market updates, 2024–2025). [[VERIFY: pull the latest specific NdPr demand-CAGR and any 2030 balance estimate — as of <date>; figures here are directional, not quoted.]]
+**Demand drivers.** NdFeB magnet demand is the spine: EV traction motors, wind-turbine generators (especially direct-drive offshore), industrial automation / humanoid robotics, and defense (precision-guided munitions, radar, aircraft actuation). Adamas Intelligence and IEA both project NdPr-oxide demand growth running well ahead of GDP through the early 2030s, with magnet rare earths the tightest sub-segment.[^2] [[VERIFY: pull the latest specific NdPr demand-CAGR and any 2030 balance estimate — as of <date>; figures here are directional, not quoted.]]
 
 Robotics/humanoids are the newest and least-priced demand vector: each humanoid actuator stack is magnet-intensive, and if unit forecasts are even partially right, it is a step-change in magnet demand that is not yet in most supply-demand balances. [[MY VIEW: do I believe the humanoid demand case enough to underwrite it, or treat it as optionality?]]
 
@@ -85,11 +91,11 @@ Two consequences for the work: (i) **all pricing in this memo and model is opaqu
 
 This is the part of the primer that is actually *investment* content, because in this market policy is the price.
 
-- **China export controls (Apr 2025).** On 4 April 2025 China placed seven medium-and-heavy rare earths and related magnet items — **samarium, gadolinium, terbium, dysprosium, lutetium, scandium, and yttrium** — under export licensing (Chinese MOFCOM/Customs announcement, 4 Apr 2025; widely reported, e.g. Reuters, Apr 2025). The licensing regime throttled heavy-RE and magnet flows to Western buyers through mid-2025 and was the proximate cause of the year's supply scare. **This is the single most important catalyst in the complex** and the reason the West's downstream-capacity push has urgency. [[VERIFY: exact element list and current licensing status / any general-license carve-outs — as of <date>.]]
+- **China export controls (Apr 2025).** On 4 April 2025 China placed seven medium-and-heavy rare earths and related magnet items — **samarium, gadolinium, terbium, dysprosium, lutetium, scandium, and yttrium** — under export licensing.[^3] The licensing regime throttled heavy-RE and magnet flows to Western buyers through mid-2025 and was the proximate cause of the year's supply scare. **This is the single most important catalyst in the complex** and the reason the West's downstream-capacity push has urgency. [[VERIFY: exact element list and current licensing status / any general-license carve-outs — as of <date>.]]
 - **The ~Nov 2026 horizon.** Subsequent US–China de-escalation reportedly produced a general-license / suspension arrangement on rare-earth export controls with a roughly **one-year** life, putting an expiry/renewal decision point in **late 2026**. Whether controls snap back, are renewed, or are made permanent around that window is a discrete, dateable catalyst. [[VERIFY: the precise terms and expiry date of the US–China rare-earth licensing arrangement, and what specifically lapses in ~Nov 2026 — as of <date>. Frame as the lead catalyst but confirm the mechanics before relying on them.]] [[MY VIEW: how I'd position into and through this window — is it a "buy the insurance" event or a "fade the panic" event?]]
-- **US DoD price floor / MP Materials (Jul 2025).** In July 2025 the US Department of Defense struck a deal with **MP Materials** that included an equity stake and, critically, a **price floor on NdPr** (reported at ~US$110/kg) plus offtake support for a new magnet facility — effectively converting a commodity producer into something closer to a regulated, floor-protected utility for a strategic input (reported widely, Jul 2025; e.g. Reuters / DoD statements). This is the template for "industrial policy as a put option" and reframes how to underwrite the Western names. [[VERIFY: the exact floor price, stake size, and tenor — as of <date>.]] [[MY VIEW: does a government price floor make MP a credit-like, floor-protected long, or does it cap the upside and socialize the downside in a way that's bad for equity? This is a core view to take.]]
+- **US DoD price floor / MP Materials (Jul 2025).** In July 2025 the US Department of Defense struck a deal with **MP Materials** that included an equity stake and, critically, a **price floor on NdPr** (reported at ~US$110/kg) plus offtake support for a new magnet facility — effectively converting a commodity producer into something closer to a regulated, floor-protected utility for a strategic input [^4] This is the template for "industrial policy as a put option" and reframes how to underwrite the Western names. [[VERIFY: the exact floor price, stake size, and tenor — as of <date>.]] [[MY VIEW: does a government price floor make MP a credit-like, floor-protected long, or does it cap the upside and socialize the downside in a way that's bad for equity? This is a core view to take.]]
 - **Offtake SPVs / strategic-reserve vehicles.** Both the US and allies are standing up offtake and stockpiling vehicles (DoD, the US strategic stockpile, allied equivalents) that contract for non-Chinese units above market. Each new SPV/offtake is a de-risking catalyst for whichever project it backs. [[VERIFY: list current US/allied offtake or stockpile vehicles and what they've contracted — as of <date>.]]
-- **EU CRMA.** The EU **Critical Raw Materials Act** (in force 2024) sets 2030 benchmarks — domestic capacity for extraction (10%), processing (40%), recycling (25%), and a cap of 65% of any strategic raw material from a single third country (European Commission, CRMA, 2024). It is a demand-pull/permitting-acceleration backdrop more than a hard subsidy, and it underwrites European processing/recycling plays (e.g. Carester, magnet recyclers). [[VERIFY: latest CRMA strategic-project designations relevant to names in this memo — as of <date>.]]
+- **EU CRMA.** The EU **Critical Raw Materials Act** (in force 2024) sets 2030 benchmarks — domestic capacity for extraction (10%), processing (40%), recycling (25%), and a cap of 65% of any strategic raw material from a single third country.[^5] It is a demand-pull/permitting-acceleration backdrop more than a hard subsidy, and it underwrites European processing/recycling plays (e.g. Carester, magnet recyclers). [[VERIFY: latest CRMA strategic-project designations relevant to names in this memo — as of <date>.]]
 
 The throughline: **in rare earths, the catalyst calendar is a policy calendar.** Demand growth is slow-moving and largely known; the re-rates come from export controls, floors, and offtakes. That is unusually good for an event-driven or catalyst-led book and unusually bad for a pure DCF.
 
@@ -180,6 +186,31 @@ The throughline: **in rare earths, the catalyst calendar is a policy calendar.**
 
 ---
 
+## Key Risks & Mitigants
+
+*Structured risk register — what blows up the thesis, and what offsets it. Mitigants are mine to write; the risk taxonomy below is the standard one for this complex.*
+
+| # | Risk | Mechanism | Mitigant |
+|---|---|---|---|
+| 1 | **Regulatory / policy reversal** | A US–China accommodation (e.g. at the ~Nov 2026 window, §1.6) removes the control premium; or a change of US administration/priorities weakens floors and offtake support. | **[[MY VIEW: my mitigant — e.g. position in the part of the stack protected by contract, not sentiment; sizing/hedge into the window.]]** |
+| 2 | **China supply flood** | Beijing raises quotas or tolerates exports to crush ex-China price signals, as in prior cycles — the historical playbook against Western entrants. | **[[MY VIEW: mitigant — e.g. floor-protected exposure only; avoid un-contracted mine-stage names.]]** |
+| 3 | **Substitution / thrifting** | Ferrite or ceramic magnets, grain-boundary-diffusion Dy-thrifting, or rare-earth-free motor designs (e.g. induction, wound-rotor) erode magnet REE intensity per unit. | **[[MY VIEW: mitigant — quantify how much demand is truly captive vs substitutable, and over what horizon.]]** |
+| 4 | **Demand disappointment** | EV adoption slows, offshore wind under-builds, humanoid robotics stays niche — the demand CAGR that underwrites every Western project fails to arrive. | **[[MY VIEW: mitigant — stress the model at trough demand; own the asset that clears at spot, not the one that needs the forecast.]]** |
+| 5 | **Execution / metallurgy** | Western separation and metal/alloy plants are first-of-kind builds; ramp failures, cost overruns, and recovery-rate misses are the norm, not the exception. | **[[MY VIEW: mitigant — prefer brownfield/proven flowsheets; haircut nameplate; watch the commissioning milestones named in §2.2.]]** |
+| 6 | **Financing / dilution** | Pre-revenue developers need repeated raises; a closed equity window converts a good asset into a bad security. | **[[MY VIEW: mitigant — the cap-structure and runway work in §2.2 is the defense; be senior where possible.]]** |
+
+---
+
+## Endnotes
+
+[^1]: USGS, *Mineral Commodity Summaries 2025*, Rare Earths chapter (Jan 2025). **[[VERIFY: pull exact production/reserve figures if cited in final — as of <date>.]]**
+[^2]: IEA, *Global Critical Minerals Outlook* (2024/2025 edition); Adamas Intelligence magnet-market updates (2024–2025). **[[VERIFY: latest edition + specific demand CAGR — as of <date>.]]**
+[^3]: Chinese MOFCOM / General Administration of Customs joint announcement, 4 Apr 2025 (export licensing on Sm, Gd, Tb, Dy, Lu, Sc, Y and related magnet items); widely reported (e.g. Reuters, Apr 2025). **[[VERIFY: element list + current licensing status — as of <date>.]]**
+[^4]: US Department of Defense – MP Materials agreement (Jul 2025): equity stake, ~US$110/kg NdPr price floor, magnet-facility offtake. Cite the definitive agreement / MP Materials 8-K when finalized. **[[VERIFY: exact floor, stake size, tenor — as of <date>.]]**
+[^5]: European Commission, *Critical Raw Materials Act*, Regulation (EU) 2024/1252 (in force May 2024): 2030 benchmarks of 10% extraction / 40% processing / 25% recycling; 65% single-third-country cap. **[[VERIFY: latest strategic-project designations — as of <date>.]]**
+
+---
+
 ## Sources & caveats
 
 **Caveats.**
@@ -187,14 +218,7 @@ The throughline: **in rare earths, the catalyst calendar is a policy calendar.**
 - **Policy is the price.** The biggest moves are export-control and subsidy events, which are discrete and hard to forecast; treat the catalyst calendar (§1.6) as the real risk model.
 - **The model is illustrative.** Element splits and prices in the spreadsheet are example placeholders until I input real deposit and market data (see the `Notes` tab and the checklist below).
 
-**Primary sources cited (date them on refresh).**
-- USGS, *Mineral Commodity Summaries 2025* — Rare Earths (Jan 2025). [[VERIFY: pull exact production/reserve figures if cited in final — as of <date>.]]
-- IEA, *Global Critical Minerals Outlook* (2024/2025). [[VERIFY: latest edition + specific demand figures — as of <date>.]]
-- Adamas Intelligence — NdPr / magnet-market updates (2024–2025). [[VERIFY.]]
-- Chinese MOFCOM/Customs export-control announcement, 4 Apr 2025 (seven medium/heavy REEs + magnets). [[VERIFY: element list + current status — as of <date>.]]
-- US DoD–MP Materials agreement, Jul 2025 (equity stake + ~US$110/kg NdPr floor + magnet offtake). [[VERIFY: terms — as of <date>.]]
-- European Commission, *Critical Raw Materials Act* (in force 2024) — 2030 benchmarks (10% extraction / 40% processing / 25% recycling / 65% single-country cap). [[VERIFY: latest strategic-project list — as of <date>.]]
-- Price references: *Asian Metal*, *Shanghai Metals Market*, *Argus*, *Fastmarkets* (China-domestic and ex-China/CIF). [[VERIFY: live quotes both regimes — as of <date>.]]
+**Sourcing convention.** Primary sources are cited as numbered endnotes at the point of use (see *Endnotes* above); on final refresh, upgrade each to the specific filing page (e.g. "MP Materials FY2025 10-K, p. __"). Price references: *Asian Metal*, *Shanghai Metals Market*, *Argus*, *Fastmarkets* (China-domestic and ex-China/CIF). [[VERIFY: live quotes both regimes — as of <date>.]]
 
 ---
 

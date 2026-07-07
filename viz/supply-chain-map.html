@@ -37,6 +37,13 @@
   .panel.collapsed { padding-bottom: inherit; }
 
   #caption { top:14px; left:14px; right:14px; max-width:640px; padding:14px 18px; }
+  .backlink {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:24px; height:24px; margin-right:6px; border-radius:6px;
+    border:1px solid var(--rule); background:#f8fafc; color:var(--muted);
+    text-decoration:none; font-size:14px; vertical-align:-3px;
+  }
+  .backlink:hover { background:#eef1f4; color:var(--ink); }
   #caption .panel-head { margin-bottom:4px; }
   #caption.collapsed .panel-head { margin-bottom:0; }
   #caption h1 { font-size:16px; margin:0; letter-spacing:-.01em; }
@@ -57,6 +64,12 @@
   #controls .swatch { width:11px; height:11px; border-radius:50%; display:inline-block; flex:0 0 auto; border:1px solid rgba(0,0,0,.15); }
   #controls .reset { font-size:12px; color:var(--sep); cursor:pointer; text-decoration:underline; background:none; border:none; padding:0; }
   #controls .actions { display:flex; align-items:center; gap:8px; }
+  .china-toggle {
+    display:flex; align-items:flex-start; gap:7px; font-size:12.5px; cursor:pointer;
+    background:#fef2f2; border:1px solid #fecaca; border-radius:7px;
+    padding:7px 9px; margin:10px 0 2px; color:var(--sep);
+  }
+  .china-toggle input { margin-top:2px; accent-color:var(--sep); }
   #controls.collapsed { max-height:none; }
 
   #legend {
@@ -90,7 +103,8 @@
 
 <div id="caption" class="panel">
   <div class="panel-head">
-    <h1>The 17 — Global Supply Chain Map <span style="color:var(--muted); font-weight:400;">(illustrative)</span></h1>
+    <h1><a class="backlink" href="../index.html" title="Back to project home">&larr;</a>
+        The 17 — Global Supply Chain Map <span style="color:var(--muted); font-weight:400;">(illustrative)</span></h1>
     <button class="panel-toggle" data-target="caption" aria-label="Minimize">&minus;</button>
   </div>
   <div class="panel-body">
@@ -110,6 +124,11 @@
     <button class="panel-toggle" data-target="controls" aria-label="Minimize">&minus;</button>
   </div>
   <div class="panel-body">
+    <label class="china-toggle">
+      <input type="checkbox" id="hide-china">
+      <span><strong>Isolate ex-China</strong> — hide all Chinese assets</span>
+    </label>
+
     <h2>Chain stage</h2>
     <div id="stage-filters"></div>
 
@@ -176,8 +195,10 @@ document.querySelectorAll('.panel-toggle').forEach(btn => {
 });
 
 const map = L.map('map', { worldCopyJump: true }).setView([20, 60], 2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors',
+// Muted corporate canvas (CartoDB Positron) so the data layer carries the color.
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+  subdomains: 'abcd',
   maxZoom: 12
 }).addTo(map);
 
@@ -209,7 +230,12 @@ function buildFilterPanel(containerId, values, set, onChange, swatchColor) {
 
 function makeIcon(asset) {
   const color = resolveColor(STAGE_COLOR[asset.chain_stage] || "var(--mine)");
-  const r = STAGE_RADIUS[asset.chain_stage] || 7;
+  let r = STAGE_RADIUS[asset.chain_stage] || 7;
+  // Scale by capacity when supplied in assets.json (t/y REO-equivalent);
+  // sqrt so area, not radius, tracks capacity. Falls back to stage default.
+  if (asset.capacity_tpa) {
+    r = Math.max(6, Math.min(18, 3 + 0.35 * Math.sqrt(asset.capacity_tpa / 100)));
+  }
   const hasPolicy = asset.policy_tags && asset.policy_tags.length > 0;
   const ring = hasPolicy ? `box-shadow:0 0 0 2.5px ${resolveColor('var(--policy)')};` : '';
   const size = r * 2 + 6;
@@ -231,6 +257,7 @@ function popupHtml(asset) {
     <strong>${asset.name}</strong><br>
     <span style="color:var(--muted)">${asset.company} — ${asset.country}</span><br>
     <div style="margin-top:6px;"><strong>Status:</strong> ${asset.status}</div>
+    ${asset.capacity_tpa ? `<div><strong>Capacity:</strong> ${asset.capacity_tpa.toLocaleString()} t/y REO-eq</div>` : ''}
     <div><strong>Elements:</strong> ${elements || '—'}</div>
     ${tags ? `<div style="margin-top:4px;">${tags}</div>` : ''}
     <div class="popup-note">${asset.notes || ''}</div>
@@ -238,7 +265,12 @@ function popupHtml(asset) {
 }
 
 function applyFilters() {
+  const hideChina = document.getElementById('hide-china').checked;
   markers.forEach(({ asset, layer }) => {
+    if (hideChina && asset.country === 'China') {
+      if (map.hasLayer(layer)) map.removeLayer(layer);
+      return;
+    }
     const stageOk = state.stages.has(asset.chain_stage);
     const elementOk = !asset.elements || asset.elements.length === 0 ||
       asset.elements.some(e => state.elements.has(e));
@@ -279,8 +311,11 @@ fetch('data/assets.json')
       layer.addTo(map);
     });
 
+    document.getElementById('hide-china').addEventListener('change', applyFilters);
+
     document.getElementById('reset-filters').addEventListener('click', () => {
       document.querySelectorAll('#controls input[type=checkbox]').forEach(cb => cb.checked = true);
+      document.getElementById('hide-china').checked = false;
       state.stages = new Set(stages);
       state.elements = new Set(elements);
       state.policies = new Set(policies);

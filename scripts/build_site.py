@@ -85,10 +85,15 @@ em { color: var(--muted); }
 a { color: var(--link); }
 hr { border: none; border-top: 1px solid var(--rule); margin: 2.4em 0; }
 blockquote {
-  margin: 1.4em 0; padding: .2em 1.1em; border-left: 3px solid var(--rule);
-  color: var(--muted); background: #fafbfc;
+  margin: 1.4em 0; padding: .7em 1.2em; border-left: 3px solid var(--accent);
+  color: var(--ink); background: #f6faf7; border-radius: 0 8px 8px 0;
+  font-size: 15.5px;
 }
-blockquote code { background: #eef1f4; }
+blockquote code { background: #eaf1eb; }
+.footnote { border-top: 1px solid var(--rule); margin-top: 2.5em;
+            font-size: 14px; color: var(--muted); }
+.footnote ol { padding-left: 1.3em; }
+sup a { text-decoration: none; font-weight: 600; }
 code {
   font: 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   background: #f3f4f6; padding: .12em .35em; border-radius: 4px;
@@ -166,7 +171,7 @@ def _render_markdown(md_path: Path) -> str:
     text = md_path.read_text(encoding="utf-8")
     body = _md.markdown(
         text,
-        extensions=["extra", "tables", "sane_lists", "toc"],
+        extensions=["extra", "tables", "sane_lists", "toc", "footnotes"],
     )
     body = _wrap_placeholders(body)
     # The memo links to ../viz/... (correct from memo/ in the repo); the site
