@@ -4,7 +4,62 @@
     "last_updated": "2026-07-07",
     "disclaimer": "All locations, statuses, ownership, offtake, capex, power, and permitting fields are best-effort placeholders assembled for scaffolding. Nothing here should be treated as confirmed — every substantive field carries a [[VERIFY]] marker and must be checked against filings/announcements before presenting.",
     "capacity_note": "[[INPUT]] Optional per-asset field 'capacity_tpa' (tonnes/year REO-equivalent). When set, the map scales marker size by capacity; when absent, markers default to stage-based sizing. Add real capacities from company filings before presenting.",
-    "field_reference": "Per-asset optional tear-sheet fields: operator, ticker (e.g. 'NYSE: MP'), ownership_type (public | private | SOE), offtake, capex_financing, power, permitting_esg. Flows below connect assets by id; every flow is [[VERIFY]]."
+    "field_reference": "Per-asset optional tear-sheet fields: operator, ticker (e.g. 'NYSE: MP'), ownership_type (public | private | SOE), offtake, capex_financing, power, permitting_esg. Flows below connect assets by id; every flow is [[VERIFY]].",
+    "online_year_note": "[[VERIFY]] 'online_year' = actual or projected first-production year (2000 = long-operating legacy). All projections are placeholders; confirm against company guidance before presenting. Drives the timeline slider.",
+    "jurisdiction_risk": {
+      "note": "[[VERIFY: replace tiers with actual Fraser Institute Investment Attractiveness rankings — as of 2026-07-07]]. Tiers: low / medium / high investment risk (illustrative).",
+      "tiers": {
+        "United States": "low",
+        "Australia": "low",
+        "Canada": "low",
+        "Japan": "low",
+        "South Korea": "low",
+        "Denmark": "low",
+        "Germany": "low",
+        "France": "low",
+        "United Kingdom": "low",
+        "Estonia": "low",
+        "Spain": "low",
+        "Brazil": "medium",
+        "Malaysia": "medium",
+        "China": "medium",
+        "Myanmar": "high"
+      }
+    },
+    "ira_note": "[[VERIFY]] IRA/DPA eligibility is approximated by jurisdiction (US + FTA partners incl. Australia, Canada, Japan, Korea, Chile; UK/AUS/CAN under DPA Title III). Per-asset eligibility must be confirmed — sourcing rules apply at the material level, not the flag level.",
+    "ira_countries": [
+      "United States",
+      "Australia",
+      "Canada",
+      "Japan",
+      "South Korea",
+      "United Kingdom"
+    ],
+    "production_totals": {
+      "note": "[[VERIFY: all figures approximate, REO-equivalent kt/y unless noted; refresh from USGS MCS 2026 / Adamas — as of 2026-07-07]]",
+      "rows": [
+        {
+          "label": "Mine output (REO kt/y)",
+          "world": "~390",
+          "ex_china": "~120"
+        },
+        {
+          "label": "Separation capacity share",
+          "world": "100%",
+          "ex_china": "~10–15%"
+        },
+        {
+          "label": "Metal / alloy share",
+          "world": "100%",
+          "ex_china": "<10%"
+        },
+        {
+          "label": "NdFeB magnet output (kt/y)",
+          "world": "~250",
+          "ex_china": "~15–20"
+        }
+      ]
+    }
   },
   "assets": [
     {
@@ -14,16 +69,25 @@
       "ticker": "NYSE: MP",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 35.4781, "lng": -115.5347,
+      "lat": 35.4781,
+      "lng": -115.5347,
       "chain_stage": "deposit/mine",
       "status": "producing",
-      "elements": ["NdPr", "La", "Ce"],
-      "policy_tags": ["DoD price floor", "US govt equity stake"],
+      "elements": [
+        "NdPr",
+        "La",
+        "Ce"
+      ],
+      "policy_tags": [
+        "DoD price floor",
+        "US govt equity stake"
+      ],
       "offtake": "NdPr supported by DoD price floor; magnet output committed downstream (GM; Apple recycled-magnet deal). [[VERIFY: current offtake book — as of 2026-07-07]]",
       "capex_financing": "Stage II/III funded from balance sheet + DoD package (equity + floor + offtake). [[VERIFY: amounts/terms per 10-K — as of 2026-07-07]]",
       "power": "Grid (on-site CHP historically); [[VERIFY: current power arrangement]]",
       "permitting_esg": "Operating permits in place; on-site tailings; Th/U management per California/fed permits. [[VERIFY]]",
-      "notes": "Only integrated US mine; ore-to-oxide on one site. [[VERIFY: status, output — as of 2026-07-07]]"
+      "notes": "Only integrated US mine; ore-to-oxide on one site. [[VERIFY: status, output — as of 2026-07-07]]",
+      "online_year": 2017
     },
     {
       "id": "mp-fort-worth",
@@ -32,16 +96,23 @@
       "ticker": "NYSE: MP",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 32.7357, "lng": -97.1081,
+      "lat": 32.7357,
+      "lng": -97.1081,
       "chain_stage": "magnet",
       "status": "construction",
-      "elements": ["NdPr"],
-      "policy_tags": ["DoD price floor", "US govt equity stake"],
+      "elements": [
+        "NdPr"
+      ],
+      "policy_tags": [
+        "DoD price floor",
+        "US govt equity stake"
+      ],
       "offtake": "GM anchor magnet offtake; DoD magnet offtake for expansion ('10X'). [[VERIFY: signed volumes/tenor — as of 2026-07-07]]",
       "capex_financing": "[[VERIFY: capex for Fort Worth + 10X facility and funding split (DoD/JPM/Goldman facilities) — as of 2026-07-07]]",
       "power": "[[VERIFY: grid supply, TX (ERCOT)]]",
       "permitting_esg": "Industrial site (magnetics), lighter permitting burden than separation. [[VERIFY]]",
-      "notes": "US mine-to-magnet chain's downstream anchor. [[VERIFY: ramp status — as of 2026-07-07]]"
+      "notes": "US mine-to-magnet chain's downstream anchor. [[VERIFY: ramp status — as of 2026-07-07]]",
+      "online_year": 2025
     },
     {
       "id": "mt-weld",
@@ -50,16 +121,24 @@
       "ticker": "ASX: LYC",
       "ownership_type": "public",
       "country": "Australia",
-      "lat": -28.85, "lng": 122.55,
+      "lat": -28.85,
+      "lng": 122.55,
       "chain_stage": "deposit/mine",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Tb"],
-      "policy_tags": ["CRMA-backed"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
+      "policy_tags": [
+        "CRMA-backed"
+      ],
       "offtake": "Feeds Lynas's own Kalgoorlie/Malaysia circuit; JARE (Japan/Sojitz) support agreement dating to 2011. [[VERIFY: current terms — as of 2026-07-07]]",
       "capex_financing": "Expansion funded from cash flow. [[VERIFY]]",
       "power": "Hybrid on-site power (remote site). [[VERIFY]]",
       "permitting_esg": "Operating WA mine; low-Th ore relative to monazite peers. [[VERIFY]]",
-      "notes": "Cornerstone ex-China mine. [[VERIFY: output — as of 2026-07-07]]"
+      "notes": "Cornerstone ex-China mine. [[VERIFY: output — as of 2026-07-07]]",
+      "online_year": 2011
     },
     {
       "id": "lynas-kalgoorlie",
@@ -68,16 +147,20 @@
       "ticker": "ASX: LYC",
       "ownership_type": "public",
       "country": "Australia",
-      "lat": -30.75, "lng": 121.47,
+      "lat": -30.75,
+      "lng": 121.47,
       "chain_stage": "separation/refining",
       "status": "producing",
-      "elements": ["NdPr"],
+      "elements": [
+        "NdPr"
+      ],
       "policy_tags": [],
       "offtake": "Internal — produces mixed carbonate for LAMP Malaysia.",
       "capex_financing": "[[VERIFY: build cost ~A$800M-class; any govt support — as of 2026-07-07]]",
       "power": "Grid (Kalgoorlie industrial). [[VERIFY]]",
       "permitting_esg": "Built partly to move cracking/leaching residue out of Malaysia. [[VERIFY: residue permitting status]]",
-      "notes": "First-stage processing; de-risks the Malaysian licence. [[VERIFY]]"
+      "notes": "First-stage processing; de-risks the Malaysian licence. [[VERIFY]]",
+      "online_year": 2023
     },
     {
       "id": "lamp",
@@ -86,16 +169,22 @@
       "ticker": "ASX: LYC",
       "ownership_type": "public",
       "country": "Malaysia",
-      "lat": 3.98, "lng": 103.42,
+      "lat": 3.98,
+      "lng": 103.42,
       "chain_stage": "separation/refining",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Tb"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
       "policy_tags": [],
       "offtake": "Historic JARE/Sojitz arrangement channels output to Japanese users. [[VERIFY: share of output contracted to Japan — as of 2026-07-07]]",
       "capex_financing": "JARE loan legacy financing. [[VERIFY]]",
       "power": "Gebeng industrial grid. [[VERIFY]]",
       "permitting_esg": "Operating licence historically contested over WLP residue; heavy circuit added. [[VERIFY: licence status + Dy/Tb capacity — as of 2026-07-07]]",
-      "notes": "Largest separation plant outside China. [[VERIFY]]"
+      "notes": "Largest separation plant outside China. [[VERIFY]]",
+      "online_year": 2012
     },
     {
       "id": "lynas-seadrift",
@@ -104,16 +193,23 @@
       "ticker": "ASX: LYC",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 28.41, "lng": -96.71,
+      "lat": 28.41,
+      "lng": -96.71,
       "chain_stage": "separation/refining",
       "status": "feasibility",
-      "elements": ["Dy", "Tb"],
-      "policy_tags": ["DoD price floor"],
+      "elements": [
+        "Dy",
+        "Tb"
+      ],
+      "policy_tags": [
+        "DoD price floor"
+      ],
       "offtake": "[[VERIFY: DoD offtake/support structure for US heavy separation — as of 2026-07-07]]",
       "capex_financing": "DoD Title III-style funding awarded for US heavy separation; site/wastewater issues delayed. [[VERIFY: current status, amount — as of 2026-07-07]]",
       "power": "[[VERIFY]]",
       "permitting_esg": "Wastewater permitting was the public sticking point. [[VERIFY: permit status]]",
-      "notes": "Would be first US heavy-RE separation. [[VERIFY: whether project proceeding at Seadrift TX — as of 2026-07-07]]"
+      "notes": "Would be first US heavy-RE separation. [[VERIFY: whether project proceeding at Seadrift TX — as of 2026-07-07]]",
+      "online_year": 2028
     },
     {
       "id": "round-top",
@@ -122,16 +218,23 @@
       "ticker": "NASDAQ: USAR",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 31.17, "lng": -105.35,
+      "lat": 31.17,
+      "lng": -105.35,
       "chain_stage": "deposit/mine",
       "status": "feasibility",
-      "elements": ["NdPr", "Dy", "Tb", "Sm"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb",
+        "Sm"
+      ],
       "policy_tags": [],
       "offtake": "None disclosed. [[VERIFY — as of 2026-07-07]]",
       "capex_financing": "[[VERIFY: PEA/PFS capex estimate + funding plan — as of 2026-07-07]]",
       "power": "[[VERIFY]]",
       "permitting_esg": "Texas state land lease; heap-leach rhyolite concept. [[VERIFY: permitting stage]]",
-      "notes": "Heavy-rich deposit, pre-construction. [[VERIFY]]"
+      "notes": "Heavy-rich deposit, pre-construction. [[VERIFY]]",
+      "online_year": 2029
     },
     {
       "id": "usar-stillwater",
@@ -140,16 +243,22 @@
       "ticker": "NASDAQ: USAR",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 45.5, "lng": -109.5,
+      "lat": 45.5,
+      "lng": -109.5,
       "chain_stage": "magnet",
       "status": "construction",
-      "elements": ["NdPr"],
-      "policy_tags": ["US govt equity stake"],
+      "elements": [
+        "NdPr"
+      ],
+      "policy_tags": [
+        "US govt equity stake"
+      ],
       "offtake": "[[VERIFY: announced customer MOUs — as of 2026-07-07]]",
       "capex_financing": "[[VERIFY: facility capex + equipment (acquired Hitachi magnet toolset) — as of 2026-07-07]]",
       "power": "[[VERIFY]]",
       "permitting_esg": "Light industrial. [[VERIFY]]",
-      "notes": "Sintered NdFeB line; feedstock not yet integrated with Round Top. [[VERIFY]]"
+      "notes": "Sintered NdFeB line; feedstock not yet integrated with Round Top. [[VERIFY]]",
+      "online_year": 2026
     },
     {
       "id": "serra-verde",
@@ -158,16 +267,22 @@
       "ticker": "private",
       "ownership_type": "private",
       "country": "Brazil",
-      "lat": -13.53, "lng": -48.22,
+      "lat": -13.53,
+      "lng": -48.22,
       "chain_stage": "deposit/mine",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Tb"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
       "policy_tags": [],
       "offtake": "Concentrate reportedly sold into Chinese separation. [[VERIFY: offtake counterparties — as of 2026-07-07]]",
       "capex_financing": "PE-funded (Denham et al.). [[VERIFY]]",
       "power": "Goiás grid (hydro-heavy). [[VERIFY]]",
       "permitting_esg": "Ionic clay, no radioactive tailings issue of monazite peers. [[VERIFY]]",
-      "notes": "First producing ionic-clay operation outside Asia. [[VERIFY: ramp — as of 2026-07-07]]"
+      "notes": "First producing ionic-clay operation outside Asia. [[VERIFY: ramp — as of 2026-07-07]]",
+      "online_year": 2024
     },
     {
       "id": "white-mesa",
@@ -176,16 +291,22 @@
       "ticker": "NYSE American: UUUU",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 37.51, "lng": -109.45,
+      "lat": 37.51,
+      "lng": -109.45,
       "chain_stage": "separation/refining",
       "status": "producing",
-      "elements": ["NdPr"],
-      "policy_tags": ["CRMA-backed"],
+      "elements": [
+        "NdPr"
+      ],
+      "policy_tags": [
+        "CRMA-backed"
+      ],
       "offtake": "[[VERIFY: NdPr sales arrangements — as of 2026-07-07]]",
       "capex_financing": "Phase 1 funded from balance sheet; monazite feed from Chemours + own heavy-sands projects (Toliara, Bahia, Donald JV). [[VERIFY]]",
       "power": "Utah grid. [[VERIFY]]",
       "permitting_esg": "Licensed uranium mill — uniquely permitted to handle radioactive monazite. Key structural edge. [[VERIFY]]",
-      "notes": "Oxide production piggybacking on uranium licence. [[VERIFY: throughput]]"
+      "notes": "Oxide production piggybacking on uranium licence. [[VERIFY: throughput]]",
+      "online_year": 2021
     },
     {
       "id": "bayan-obo",
@@ -194,16 +315,24 @@
       "ticker": "SSE: 600111",
       "ownership_type": "SOE",
       "country": "China",
-      "lat": 41.77, "lng": 109.95,
+      "lat": 41.77,
+      "lng": 109.95,
       "chain_stage": "deposit/mine",
       "status": "producing",
-      "elements": ["NdPr", "La", "Ce"],
-      "policy_tags": ["China export control"],
+      "elements": [
+        "NdPr",
+        "La",
+        "Ce"
+      ],
+      "policy_tags": [
+        "China export control"
+      ],
       "offtake": "Internal to Baogang/CNRE quota system.",
       "capex_financing": "State-financed.",
       "power": "Inner Mongolia grid (coal-heavy). [[VERIFY]]",
       "permitting_esg": "Weilikuang tailings dam is the world's largest RE tailings liability. [[VERIFY]]",
-      "notes": "World's largest REE mine (iron-ore byproduct). [[VERIFY: quota share — as of 2026-07-07]]"
+      "notes": "World's largest REE mine (iron-ore byproduct). [[VERIFY: quota share — as of 2026-07-07]]",
+      "online_year": 2000
     },
     {
       "id": "baotou-cluster",
@@ -212,16 +341,24 @@
       "ticker": "SSE: 600111",
       "ownership_type": "SOE",
       "country": "China",
-      "lat": 40.66, "lng": 109.84,
+      "lat": 40.66,
+      "lng": 109.84,
       "chain_stage": "magnet",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Tb"],
-      "policy_tags": ["China export control"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
+      "policy_tags": [
+        "China export control"
+      ],
       "offtake": "Supplies domestic magnet makers and export (licence-gated).",
       "capex_financing": "State-financed.",
       "power": "Inner Mongolia grid. [[VERIFY]]",
       "permitting_esg": "Legacy effluent standards central to China's cost advantage. [[VERIFY]]",
-      "notes": "Light-RE midstream/downstream heart. [[VERIFY: capacity share — as of 2026-07-07]]"
+      "notes": "Light-RE midstream/downstream heart. [[VERIFY: capacity share — as of 2026-07-07]]",
+      "online_year": 2000
     },
     {
       "id": "ganzhou",
@@ -230,16 +367,24 @@
       "ticker": "SOE group; listed arm SZSE: 000831",
       "ownership_type": "SOE",
       "country": "China",
-      "lat": 25.83, "lng": 114.93,
+      "lat": 25.83,
+      "lng": 114.93,
       "chain_stage": "separation/refining",
       "status": "producing",
-      "elements": ["Dy", "Tb", "NdPr"],
-      "policy_tags": ["China export control"],
+      "elements": [
+        "Dy",
+        "Tb",
+        "NdPr"
+      ],
+      "policy_tags": [
+        "China export control"
+      ],
       "offtake": "Feeds Chinese magnet industry; exports licence-gated since Apr 2025.",
       "capex_financing": "State-financed.",
       "power": "Jiangxi grid. [[VERIFY]]",
       "permitting_esg": "Ionic-clay leaching legacy damage in Jiangxi drove consolidation. [[VERIFY]]",
-      "notes": "Center of global heavy-RE separation. [[VERIFY: entities/capacity — as of 2026-07-07]]"
+      "notes": "Center of global heavy-RE separation. [[VERIFY: entities/capacity — as of 2026-07-07]]",
+      "online_year": 2000
     },
     {
       "id": "myanmar-clays",
@@ -248,16 +393,21 @@
       "ticker": "unlisted",
       "ownership_type": "private",
       "country": "Myanmar",
-      "lat": 25.4, "lng": 97.4,
+      "lat": 25.4,
+      "lng": 97.4,
       "chain_stage": "deposit/mine",
       "status": "producing",
-      "elements": ["Dy", "Tb"],
+      "elements": [
+        "Dy",
+        "Tb"
+      ],
       "policy_tags": [],
       "offtake": "Effectively 100% to Chinese separators (Ganzhou).",
       "capex_financing": "Informal.",
       "power": "n/a",
       "permitting_esg": "Unregulated in-situ leaching; conflict-zone supply — the single biggest ESG hole in global heavy supply. [[VERIFY: current volumes/disruptions — as of 2026-07-07]]",
-      "notes": "Largest heavy-RE feedstock source; supply swings with border politics. [[VERIFY]]"
+      "notes": "Largest heavy-RE feedstock source; supply swings with border politics. [[VERIFY]]",
+      "online_year": 2016
     },
     {
       "id": "caremag-lacq",
@@ -266,16 +416,24 @@
       "ticker": "private",
       "ownership_type": "private",
       "country": "France",
-      "lat": 43.41, "lng": -0.63,
+      "lat": 43.41,
+      "lng": -0.63,
       "chain_stage": "separation/refining",
       "status": "construction",
-      "elements": ["NdPr", "Dy", "Tb"],
-      "policy_tags": ["CRMA-backed"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
+      "policy_tags": [
+        "CRMA-backed"
+      ],
       "offtake": "Prepayment/offtake from Japanese (JOGMEC/Iwatani) and other partners reported. [[VERIFY: counterparties + volumes — as of 2026-07-07]]",
       "capex_financing": "[[VERIFY: ~€200M-class capex; French state + JOGMEC funding mix — as of 2026-07-07]]",
       "power": "Lacq chemical basin grid (nuclear-heavy French power). [[VERIFY]]",
       "permitting_esg": "Brownfield chemical complex eases permitting. [[VERIFY: status]]",
-      "notes": "Founder-led (ex-Rhodia separation team); heavy+light separation + recycling. [[VERIFY: timeline]]"
+      "notes": "Founder-led (ex-Rhodia separation team); heavy+light separation + recycling. [[VERIFY: timeline]]",
+      "online_year": 2027
     },
     {
       "id": "solvay-la-rochelle",
@@ -284,16 +442,24 @@
       "ticker": "EBR: SYENS",
       "ownership_type": "public",
       "country": "France",
-      "lat": 46.16, "lng": -1.15,
+      "lat": 46.16,
+      "lng": -1.15,
       "chain_stage": "separation/refining",
       "status": "producing",
-      "elements": ["NdPr", "La", "Ce"],
-      "policy_tags": ["CRMA-backed"],
+      "elements": [
+        "NdPr",
+        "La",
+        "Ce"
+      ],
+      "policy_tags": [
+        "CRMA-backed"
+      ],
       "offtake": "[[VERIFY: magnet-grade NdPr restart customers — as of 2026-07-07]]",
       "capex_financing": "Restarting legacy Rhône-Poulenc separation lines for magnet REs. [[VERIFY: investment scale]]",
       "power": "French grid (nuclear). [[VERIFY]]",
       "permitting_esg": "Operating heritage site since 1948. [[VERIFY]]",
-      "notes": "Europe's legacy separation know-how. [[VERIFY: NdPr line status — as of 2026-07-07]]"
+      "notes": "Europe's legacy separation know-how. [[VERIFY: NdPr line status — as of 2026-07-07]]",
+      "online_year": 2025
     },
     {
       "id": "neo-silmet",
@@ -302,16 +468,22 @@
       "ticker": "TSX: NEO",
       "ownership_type": "public",
       "country": "Estonia",
-      "lat": 59.40, "lng": 27.74,
+      "lat": 59.4,
+      "lng": 27.74,
       "chain_stage": "separation/refining",
       "status": "producing",
-      "elements": ["NdPr"],
-      "policy_tags": ["CRMA-backed"],
+      "elements": [
+        "NdPr"
+      ],
+      "policy_tags": [
+        "CRMA-backed"
+      ],
       "offtake": "Feeds Neo's own magnet/powder chain incl. Narva. [[VERIFY]]",
       "capex_financing": "[[VERIFY]]",
       "power": "Estonian grid. [[VERIFY]]",
       "permitting_esg": "Only operating RE separation in the EU (legacy Soviet plant). [[VERIFY]]",
-      "notes": "Feedstock historically Russian loparite; diversifying (Energy Fuels monazite trials). [[VERIFY: feed sources — as of 2026-07-07]]"
+      "notes": "Feedstock historically Russian loparite; diversifying (Energy Fuels monazite trials). [[VERIFY: feed sources — as of 2026-07-07]]",
+      "online_year": 2000
     },
     {
       "id": "neo-narva",
@@ -320,16 +492,22 @@
       "ticker": "TSX: NEO",
       "ownership_type": "public",
       "country": "Estonia",
-      "lat": 59.38, "lng": 28.19,
+      "lat": 59.38,
+      "lng": 28.19,
       "chain_stage": "magnet",
       "status": "construction",
-      "elements": ["NdPr"],
-      "policy_tags": ["CRMA-backed"],
+      "elements": [
+        "NdPr"
+      ],
+      "policy_tags": [
+        "CRMA-backed"
+      ],
       "offtake": "European automotive/wind customer agreements announced. [[VERIFY: names (e.g. Bosch) + volumes — as of 2026-07-07]]",
       "capex_financing": "EU Just Transition Fund grant support. [[VERIFY: amount]]",
       "power": "Estonian grid. [[VERIFY]]",
       "permitting_esg": "Light industrial. [[VERIFY]]",
-      "notes": "First EU-scale sintered NdFeB plant. [[VERIFY: ramp — as of 2026-07-07]]"
+      "notes": "First EU-scale sintered NdFeB plant. [[VERIFY: ramp — as of 2026-07-07]]",
+      "online_year": 2025
     },
     {
       "id": "src-saskatoon",
@@ -338,16 +516,20 @@
       "ticker": "state-owned",
       "ownership_type": "SOE",
       "country": "Canada",
-      "lat": 52.13, "lng": -106.63,
+      "lat": 52.13,
+      "lng": -106.63,
       "chain_stage": "metal/alloy",
       "status": "construction",
-      "elements": ["NdPr"],
+      "elements": [
+        "NdPr"
+      ],
       "policy_tags": [],
       "offtake": "[[VERIFY: commercial arrangements — as of 2026-07-07]]",
       "capex_financing": "Saskatchewan provincial funding (~C$100M-class). [[VERIFY]]",
       "power": "SaskPower grid. [[VERIFY]]",
       "permitting_esg": "Government demonstrator — separation + metal. [[VERIFY: commissioning status]]",
-      "notes": "First North American integrated oxide-to-metal demonstrator. [[VERIFY]]"
+      "notes": "First North American integrated oxide-to-metal demonstrator. [[VERIFY]]",
+      "online_year": 2025
     },
     {
       "id": "eneabba",
@@ -356,16 +538,24 @@
       "ticker": "ASX: ILU",
       "ownership_type": "public",
       "country": "Australia",
-      "lat": -29.83, "lng": 115.27,
+      "lat": -29.83,
+      "lng": 115.27,
       "chain_stage": "separation/refining",
       "status": "construction",
-      "elements": ["NdPr", "Dy", "Tb"],
-      "policy_tags": ["CRMA-backed"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
+      "policy_tags": [
+        "CRMA-backed"
+      ],
       "offtake": "[[VERIFY: offtake discussions — as of 2026-07-07]]",
       "capex_financing": "Australian govt non-recourse loan (A$1bn+ class) against monazite stockpile. [[VERIFY: current budget — as of 2026-07-07]]",
       "power": "WA grid + on-site. [[VERIFY]]",
       "permitting_esg": "Feedstock is an existing surface stockpile — permitting advantage. [[VERIFY]]",
-      "notes": "Mineral-sands byproduct route to oxides. [[VERIFY: first production date]]"
+      "notes": "Mineral-sands byproduct route to oxides. [[VERIFY: first production date]]",
+      "online_year": 2027
     },
     {
       "id": "nolans",
@@ -374,16 +564,22 @@
       "ticker": "ASX: ARU",
       "ownership_type": "public",
       "country": "Australia",
-      "lat": -22.93, "lng": 133.20,
+      "lat": -22.93,
+      "lng": 133.2,
       "chain_stage": "deposit/mine",
       "status": "feasibility",
-      "elements": ["NdPr"],
-      "policy_tags": ["CRMA-backed"],
+      "elements": [
+        "NdPr"
+      ],
+      "policy_tags": [
+        "CRMA-backed"
+      ],
       "offtake": "Binding offtakes announced with Hyundai/Kia and Siemens Gamesa. [[VERIFY: volumes/status — as of 2026-07-07]]",
       "capex_financing": "A$1bn+ govt debt package (NAIF/EFA) toward ~A$1.7bn-class capex; equity gap outstanding. [[VERIFY — as of 2026-07-07]]",
       "power": "Planned on-site power. [[VERIFY]]",
       "permitting_esg": "Integrated mine + phosphate + oxide; approvals largely in hand. [[VERIFY]]",
-      "notes": "FID hinges on closing the equity gap. [[VERIFY: financing status]]"
+      "notes": "FID hinges on closing the equity gap. [[VERIFY: financing status]]",
+      "online_year": 2030
     },
     {
       "id": "browns-range",
@@ -392,16 +588,21 @@
       "ticker": "ASX: NTU",
       "ownership_type": "public",
       "country": "Australia",
-      "lat": -18.85, "lng": 128.95,
+      "lat": -18.85,
+      "lng": 128.95,
       "chain_stage": "deposit/mine",
       "status": "feasibility",
-      "elements": ["Dy", "Tb"],
+      "elements": [
+        "Dy",
+        "Tb"
+      ],
       "policy_tags": [],
       "offtake": "Offtake with Iluka Eneabba announced. [[VERIFY: terms — as of 2026-07-07]]",
       "capex_financing": "[[VERIFY: DFS capex + funding — as of 2026-07-07]]",
       "power": "Remote site — own power required. [[VERIFY]]",
       "permitting_esg": "Xenotime (heavy-rich) ore. [[VERIFY: permitting stage]]",
-      "notes": "One of few Western heavy-RE deposits; ran a pilot plant. [[VERIFY]]"
+      "notes": "One of few Western heavy-RE deposits; ran a pilot plant. [[VERIFY]]",
+      "online_year": 2028
     },
     {
       "id": "yangibana",
@@ -410,16 +611,20 @@
       "ticker": "ASX: HAS",
       "ownership_type": "public",
       "country": "Australia",
-      "lat": -24.6, "lng": 116.1,
+      "lat": -24.6,
+      "lng": 116.1,
       "chain_stage": "deposit/mine",
       "status": "construction",
-      "elements": ["NdPr"],
+      "elements": [
+        "NdPr"
+      ],
       "policy_tags": [],
       "offtake": "[[VERIFY: offtake + Wyloo/beneficiation arrangements — as of 2026-07-07]]",
       "capex_financing": "Part-built then paused pending funding; NAIF loan history. [[VERIFY: current status — as of 2026-07-07]]",
       "power": "Remote — own power. [[VERIFY]]",
       "permitting_esg": "High NdPr:TREO ratio ore. [[VERIFY]]",
-      "notes": "Illustrates the Western financing gap. [[VERIFY: whether care & maintenance]]"
+      "notes": "Illustrates the Western financing gap. [[VERIFY: whether care & maintenance]]",
+      "online_year": 2027
     },
     {
       "id": "dubbo",
@@ -428,16 +633,22 @@
       "ticker": "ASX: ASM",
       "ownership_type": "public",
       "country": "Australia",
-      "lat": -32.37, "lng": 148.72,
+      "lat": -32.37,
+      "lng": 148.72,
       "chain_stage": "deposit/mine",
       "status": "feasibility",
-      "elements": ["NdPr", "Dy", "Tb"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
       "policy_tags": [],
       "offtake": "[[VERIFY: US EXIM LOI + Korean offtake — as of 2026-07-07]]",
       "capex_financing": "US EXIM letter of interest (~US$600M) reported. [[VERIFY]]",
       "power": "NSW grid. [[VERIFY]]",
       "permitting_esg": "Polymetallic (Zr/Nb/RE); long-dated approvals in place. [[VERIFY]]",
-      "notes": "Paired with ASM's Korean metals plant. [[VERIFY]]"
+      "notes": "Paired with ASM's Korean metals plant. [[VERIFY]]",
+      "online_year": 2030
     },
     {
       "id": "asm-korea",
@@ -446,16 +657,20 @@
       "ticker": "ASX: ASM",
       "ownership_type": "public",
       "country": "South Korea",
-      "lat": 36.72, "lng": 127.43,
+      "lat": 36.72,
+      "lng": 127.43,
       "chain_stage": "metal/alloy",
       "status": "producing",
-      "elements": ["NdPr"],
+      "elements": [
+        "NdPr"
+      ],
       "policy_tags": [],
       "offtake": "NdFeB alloy sales incl. US (Noveon) reported. [[VERIFY — as of 2026-07-07]]",
       "capex_financing": "[[VERIFY]]",
       "power": "Korean grid. [[VERIFY]]",
       "permitting_esg": "Metallization only (no separation residue). [[VERIFY]]",
-      "notes": "Rare ex-China oxide-to-metal capacity. [[VERIFY: utilization]]"
+      "notes": "Rare ex-China oxide-to-metal capacity. [[VERIFY: utilization]]",
+      "online_year": 2022
     },
     {
       "id": "lcm-uk",
@@ -464,16 +679,21 @@
       "ticker": "private",
       "ownership_type": "private",
       "country": "United Kingdom",
-      "lat": 53.28, "lng": -2.90,
+      "lat": 53.28,
+      "lng": -2.9,
       "chain_stage": "metal/alloy",
       "status": "producing",
-      "elements": ["NdPr", "Sm"],
+      "elements": [
+        "NdPr",
+        "Sm"
+      ],
       "policy_tags": [],
       "offtake": "Supplies Western magnet makers incl. SmCo chain. [[VERIFY: customers — as of 2026-07-07]]",
       "capex_financing": "[[VERIFY: expansion plans/funding]]",
       "power": "UK grid. [[VERIFY]]",
       "permitting_esg": "Long-operating niche alloy house. [[VERIFY]]",
-      "notes": "One of the only Western strip-cast alloy producers — the quiet bottleneck asset. [[VERIFY]]"
+      "notes": "One of the only Western strip-cast alloy producers — the quiet bottleneck asset. [[VERIFY]]",
+      "online_year": 2000
     },
     {
       "id": "e-vac-sumter",
@@ -482,16 +702,21 @@
       "ticker": "private (Ara Partners-backed)",
       "ownership_type": "private",
       "country": "United States",
-      "lat": 33.92, "lng": -80.34,
+      "lat": 33.92,
+      "lng": -80.34,
       "chain_stage": "magnet",
       "status": "construction",
-      "elements": ["NdPr", "Dy"],
+      "elements": [
+        "NdPr",
+        "Dy"
+      ],
       "policy_tags": [],
       "offtake": "Anchor offtake: General Motors (long-term magnet supply). [[VERIFY: terms — as of 2026-07-07]]",
       "capex_financing": "~US$500M-class build; US 48C tax-credit support reported. [[VERIFY]]",
       "power": "South Carolina grid. [[VERIFY]]",
       "permitting_esg": "Light industrial. [[VERIFY]]",
-      "notes": "German magnet know-how (Vacuumschmelze) transplanted to the US. [[VERIFY: start-up date]]"
+      "notes": "German magnet know-how (Vacuumschmelze) transplanted to the US. [[VERIFY: start-up date]]",
+      "online_year": 2026
     },
     {
       "id": "vac-hanau",
@@ -500,16 +725,22 @@
       "ticker": "private (Ara Partners-backed)",
       "ownership_type": "private",
       "country": "Germany",
-      "lat": 50.13, "lng": 8.92,
+      "lat": 50.13,
+      "lng": 8.92,
       "chain_stage": "magnet",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Sm"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Sm"
+      ],
       "policy_tags": [],
       "offtake": "European auto/industrial customers. [[VERIFY]]",
       "capex_financing": "[[VERIFY]]",
       "power": "German grid. [[VERIFY]]",
       "permitting_esg": "Legacy site since 1923. [[VERIFY]]",
-      "notes": "Europe's flagship magnet maker (NdFeB + SmCo). [[VERIFY: capacity]]"
+      "notes": "Europe's flagship magnet maker (NdFeB + SmCo). [[VERIFY: capacity]]",
+      "online_year": 2000
     },
     {
       "id": "proterial-japan",
@@ -518,16 +749,22 @@
       "ticker": "private (Bain-backed)",
       "ownership_type": "private",
       "country": "Japan",
-      "lat": 36.15, "lng": 139.39,
+      "lat": 36.15,
+      "lng": 139.39,
       "chain_stage": "magnet",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Tb"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
       "policy_tags": [],
       "offtake": "Japanese auto OEMs (Toyota et al.). [[VERIFY]]",
       "capex_financing": "[[VERIFY]]",
       "power": "Japanese grid. [[VERIFY]]",
       "permitting_esg": "Holder of foundational NdFeB patents (with Magnequench lineage). [[VERIFY]]",
-      "notes": "Top-tier non-Chinese magnet maker. [[VERIFY: capacity share]]"
+      "notes": "Top-tier non-Chinese magnet maker. [[VERIFY: capacity share]]",
+      "online_year": 2000
     },
     {
       "id": "shin-etsu-echizen",
@@ -536,16 +773,22 @@
       "ticker": "TYO: 4063",
       "ownership_type": "public",
       "country": "Japan",
-      "lat": 35.90, "lng": 136.17,
+      "lat": 35.9,
+      "lng": 136.17,
       "chain_stage": "magnet",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Tb"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
       "policy_tags": [],
       "offtake": "Global electronics/auto customers. [[VERIFY]]",
       "capex_financing": "Internally funded (A-rated balance sheet).",
       "power": "Japanese grid. [[VERIFY]]",
       "permitting_esg": "Integrated magnet + grain-boundary-diffusion technology. [[VERIFY]]",
-      "notes": "Quality benchmark for high-grade NdFeB. [[VERIFY]]"
+      "notes": "Quality benchmark for high-grade NdFeB. [[VERIFY]]",
+      "online_year": 2000
     },
     {
       "id": "tdk-japan",
@@ -554,16 +797,21 @@
       "ticker": "TYO: 6762",
       "ownership_type": "public",
       "country": "Japan",
-      "lat": 39.72, "lng": 140.10,
+      "lat": 39.72,
+      "lng": 140.1,
       "chain_stage": "magnet",
       "status": "producing",
-      "elements": ["NdPr", "Dy"],
+      "elements": [
+        "NdPr",
+        "Dy"
+      ],
       "policy_tags": [],
       "offtake": "Consumer electronics + auto. [[VERIFY]]",
       "capex_financing": "Internally funded.",
       "power": "Japanese grid. [[VERIFY]]",
       "permitting_esg": "[[VERIFY]]",
-      "notes": "Akita-region magnet manufacturing base. [[VERIFY: sites]]"
+      "notes": "Akita-region magnet manufacturing base. [[VERIFY: sites]]",
+      "online_year": 2000
     },
     {
       "id": "jl-mag",
@@ -572,16 +820,24 @@
       "ticker": "SZSE: 300748 / HKEX: 6680",
       "ownership_type": "public",
       "country": "China",
-      "lat": 25.90, "lng": 115.05,
+      "lat": 25.9,
+      "lng": 115.05,
       "chain_stage": "magnet",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Tb"],
-      "policy_tags": ["China export control"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
+      "policy_tags": [
+        "China export control"
+      ],
       "offtake": "Supplies Tesla, BYD, wind OEMs. [[VERIFY: disclosed customer list — as of 2026-07-07]]",
       "capex_financing": "Listed; state-adjacent expansion support.",
       "power": "Jiangxi grid. [[VERIFY]]",
       "permitting_esg": "[[VERIFY]]",
-      "notes": "World's largest sintered NdFeB producer. [[VERIFY: capacity]]"
+      "notes": "World's largest sintered NdFeB producer. [[VERIFY: capacity]]",
+      "online_year": 2008
     },
     {
       "id": "cyclic-materials",
@@ -590,16 +846,21 @@
       "ticker": "private (VC-backed incl. Amazon/BMW funds)",
       "ownership_type": "private",
       "country": "Canada",
-      "lat": 44.23, "lng": -76.48,
+      "lat": 44.23,
+      "lng": -76.48,
       "chain_stage": "recycling",
       "status": "construction",
-      "elements": ["NdPr", "Dy"],
+      "elements": [
+        "NdPr",
+        "Dy"
+      ],
       "policy_tags": [],
       "offtake": "Supply agreements with Solvay (La Rochelle) and Glencore reported. [[VERIFY — as of 2026-07-07]]",
       "capex_financing": "Series B venture funding. [[VERIFY: amount]]",
       "power": "Ontario grid. [[VERIFY]]",
       "permitting_esg": "Magnet-scrap recycling — no mining footprint. [[VERIFY]]",
-      "notes": "End-of-life motor/magnet feedstock aggregation. [[VERIFY: scale]]"
+      "notes": "End-of-life motor/magnet feedstock aggregation. [[VERIFY: scale]]",
+      "online_year": 2026
     },
     {
       "id": "hypromag-uk",
@@ -608,16 +869,20 @@
       "ticker": "AIM: MKA",
       "ownership_type": "public",
       "country": "United Kingdom",
-      "lat": 52.46, "lng": -1.83,
+      "lat": 52.46,
+      "lng": -1.83,
       "chain_stage": "recycling",
       "status": "construction",
-      "elements": ["NdPr"],
+      "elements": [
+        "NdPr"
+      ],
       "policy_tags": [],
       "offtake": "[[VERIFY: pilot customers — as of 2026-07-07]]",
       "capex_financing": "[[VERIFY: UK/German (HyProMag GmbH) + US expansion funding]]",
       "power": "UK grid. [[VERIFY]]",
       "permitting_esg": "HPMS hydrogen-decrepitation recycling (Univ. of Birmingham IP). [[VERIFY]]",
-      "notes": "Short-loop magnet-to-magnet recycling. [[VERIFY: throughput]]"
+      "notes": "Short-loop magnet-to-magnet recycling. [[VERIFY: throughput]]",
+      "online_year": 2025
     },
     {
       "id": "tesla-austin",
@@ -626,16 +891,20 @@
       "ticker": "NASDAQ: TSLA",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 30.22, "lng": -97.62,
+      "lat": 30.22,
+      "lng": -97.62,
       "chain_stage": "oem/downstream",
       "status": "producing",
-      "elements": ["NdPr"],
+      "elements": [
+        "NdPr"
+      ],
       "policy_tags": [],
       "offtake": "Buys magnets (historically incl. Chinese suppliers); publicly flagged next-gen RE-free motor intent. [[VERIFY: current magnet sourcing — as of 2026-07-07]]",
       "capex_financing": "n/a (OEM demand node)",
       "power": "ERCOT + on-site solar. [[VERIFY]]",
       "permitting_esg": "n/a",
-      "notes": "Demand-side anchor; the substitution-risk bellwether (§ Key Risks). [[VERIFY]]"
+      "notes": "Demand-side anchor; the substitution-risk bellwether (§ Key Risks). [[VERIFY]]",
+      "online_year": 2022
     },
     {
       "id": "gm-detroit",
@@ -644,16 +913,21 @@
       "ticker": "NYSE: GM",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 42.33, "lng": -83.05,
+      "lat": 42.33,
+      "lng": -83.05,
       "chain_stage": "oem/downstream",
       "status": "producing",
-      "elements": ["NdPr", "Dy"],
+      "elements": [
+        "NdPr",
+        "Dy"
+      ],
       "policy_tags": [],
       "offtake": "Buy-side anchor of both MP (Fort Worth) and e-VAC (Sumter) magnet plants. [[VERIFY: contract structure — as of 2026-07-07]]",
       "capex_financing": "n/a (OEM demand node)",
       "power": "n/a",
       "permitting_esg": "n/a",
-      "notes": "The template for OEM-financed magnet onshoring. [[VERIFY]]"
+      "notes": "The template for OEM-financed magnet onshoring. [[VERIFY]]",
+      "online_year": 2000
     },
     {
       "id": "byd-shenzhen",
@@ -662,16 +936,20 @@
       "ticker": "HKEX: 1211",
       "ownership_type": "public",
       "country": "China",
-      "lat": 22.61, "lng": 114.06,
+      "lat": 22.61,
+      "lng": 114.06,
       "chain_stage": "oem/downstream",
       "status": "producing",
-      "elements": ["NdPr"],
+      "elements": [
+        "NdPr"
+      ],
       "policy_tags": [],
       "offtake": "Domestic magnet supply (JL MAG et al.). [[VERIFY]]",
       "capex_financing": "n/a",
       "power": "n/a",
       "permitting_esg": "n/a",
-      "notes": "Largest EV-side magnet demand sink. [[VERIFY]]"
+      "notes": "Largest EV-side magnet demand sink. [[VERIFY]]",
+      "online_year": 2000
     },
     {
       "id": "toyota-city",
@@ -680,16 +958,21 @@
       "ticker": "TYO: 7203",
       "ownership_type": "public",
       "country": "Japan",
-      "lat": 35.08, "lng": 137.16,
+      "lat": 35.08,
+      "lng": 137.16,
       "chain_stage": "oem/downstream",
       "status": "producing",
-      "elements": ["NdPr", "Dy"],
+      "elements": [
+        "NdPr",
+        "Dy"
+      ],
       "policy_tags": [],
       "offtake": "Japanese magnet chain (Proterial, Shin-Etsu, TDK); pioneer of Nd-reduced magnet R&D. [[VERIFY]]",
       "capex_financing": "n/a",
       "power": "n/a",
       "permitting_esg": "n/a",
-      "notes": "Japan's demand anchor behind the JARE/Lynas strategy. [[VERIFY]]"
+      "notes": "Japan's demand anchor behind the JARE/Lynas strategy. [[VERIFY]]",
+      "online_year": 2000
     },
     {
       "id": "vestas-aarhus",
@@ -698,16 +981,22 @@
       "ticker": "CPH: VWS",
       "ownership_type": "public",
       "country": "Denmark",
-      "lat": 56.16, "lng": 10.20,
+      "lat": 56.16,
+      "lng": 10.2,
       "chain_stage": "oem/downstream",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Tb"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
       "policy_tags": [],
       "offtake": "Direct-drive/PM generator magnet demand. [[VERIFY: sourcing mix]]",
       "capex_financing": "n/a",
       "power": "n/a",
       "permitting_esg": "n/a",
-      "notes": "Wind is the second demand pillar after EVs. [[VERIFY]]"
+      "notes": "Wind is the second demand pillar after EVs. [[VERIFY]]",
+      "online_year": 2000
     },
     {
       "id": "siemens-gamesa",
@@ -716,16 +1005,22 @@
       "ticker": "ETR: ENR",
       "ownership_type": "public",
       "country": "Spain",
-      "lat": 43.28, "lng": -2.86,
+      "lat": 43.28,
+      "lng": -2.86,
       "chain_stage": "oem/downstream",
       "status": "producing",
-      "elements": ["NdPr", "Dy", "Tb"],
+      "elements": [
+        "NdPr",
+        "Dy",
+        "Tb"
+      ],
       "policy_tags": [],
       "offtake": "Offshore direct-drive turbines = highest magnet intensity per unit; Arafura offtake signatory. [[VERIFY — as of 2026-07-07]]",
       "capex_financing": "n/a",
       "power": "n/a",
       "permitting_esg": "n/a",
-      "notes": "Offshore wind demand anchor. [[VERIFY]]"
+      "notes": "Offshore wind demand anchor. [[VERIFY]]",
+      "online_year": 2000
     },
     {
       "id": "ge-vernova",
@@ -734,16 +1029,21 @@
       "ticker": "NYSE: GEV",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 42.81, "lng": -73.94,
+      "lat": 42.81,
+      "lng": -73.94,
       "chain_stage": "oem/downstream",
       "status": "producing",
-      "elements": ["NdPr", "Dy"],
+      "elements": [
+        "NdPr",
+        "Dy"
+      ],
       "policy_tags": [],
       "offtake": "Haliade-X offshore platform magnet demand. [[VERIFY: sourcing]]",
       "capex_financing": "n/a",
       "power": "n/a",
       "permitting_esg": "n/a",
-      "notes": "US wind demand anchor. [[VERIFY]]"
+      "notes": "US wind demand anchor. [[VERIFY]]",
+      "online_year": 2000
     },
     {
       "id": "apple-cupertino",
@@ -752,36 +1052,131 @@
       "ticker": "NASDAQ: AAPL",
       "ownership_type": "public",
       "country": "United States",
-      "lat": 37.33, "lng": -122.01,
+      "lat": 37.33,
+      "lng": -122.01,
       "chain_stage": "oem/downstream",
       "status": "producing",
-      "elements": ["NdPr", "Dy"],
+      "elements": [
+        "NdPr",
+        "Dy"
+      ],
       "policy_tags": [],
       "offtake": "US$500M-class recycled-magnet purchase commitment with MP Materials reported (2025). [[VERIFY: terms — as of 2026-07-07]]",
       "capex_financing": "n/a",
       "power": "n/a",
       "permitting_esg": "100% recycled-RE commitment in devices. [[VERIFY]]",
-      "notes": "Consumer-electronics demand + recycling pull. [[VERIFY]]"
+      "notes": "Consumer-electronics demand + recycling pull. [[VERIFY]]",
+      "online_year": 2000
     }
   ],
   "flows": [
-    { "from": "mt-weld", "to": "lynas-kalgoorlie", "material": "RE concentrate", "note": "Truck/rail to cracking & leaching. [[VERIFY]]" },
-    { "from": "lynas-kalgoorlie", "to": "lamp", "material": "Mixed RE carbonate", "note": "Shipped to Malaysia for separation. [[VERIFY]]" },
-    { "from": "lamp", "to": "proterial-japan", "material": "Separated NdPr oxide", "note": "Japan-bound under JARE/Sojitz framework. [[VERIFY: volumes]]" },
-    { "from": "myanmar-clays", "to": "ganzhou", "material": "Ionic-clay heavy feedstock", "note": "Effectively sole buyer relationship. [[VERIFY: current border flows]]" },
-    { "from": "bayan-obo", "to": "baotou-cluster", "material": "Concentrate", "note": "Integrated Baogang chain. [[VERIFY]]" },
-    { "from": "ganzhou", "to": "jl-mag", "material": "Oxides / metal", "note": "Local heavy-RE supply into magnet production. [[VERIFY]]" },
-    { "from": "jl-mag", "to": "tesla-austin", "material": "Sintered NdFeB magnets", "note": "Reported supplier relationship; licence-gated since Apr 2025. [[VERIFY]]" },
-    { "from": "jl-mag", "to": "byd-shenzhen", "material": "Sintered NdFeB magnets", "note": "[[VERIFY]]" },
-    { "from": "mtn-pass", "to": "mp-fort-worth", "material": "NdPr oxide / metal", "note": "Internal mine-to-magnet chain. [[VERIFY]]" },
-    { "from": "mp-fort-worth", "to": "gm-detroit", "material": "Finished magnets", "note": "GM anchor offtake. [[VERIFY]]" },
-    { "from": "e-vac-sumter", "to": "gm-detroit", "material": "Finished magnets", "note": "GM long-term supply agreement. [[VERIFY]]" },
-    { "from": "serra-verde", "to": "ganzhou", "material": "RE concentrate (MREC)", "note": "Western mine routing to Chinese separation — the structural-deficit visual. [[VERIFY: destination]]" },
-    { "from": "browns-range", "to": "eneabba", "material": "Heavy-RE concentrate (planned)", "note": "Announced offtake. [[VERIFY: status]]" },
-    { "from": "dubbo", "to": "asm-korea", "material": "Oxides (planned)", "note": "ASM integrated strategy. [[VERIFY]]" },
-    { "from": "neo-silmet", "to": "neo-narva", "material": "NdPr oxide/metal", "note": "Neo internal Estonian chain. [[VERIFY]]" },
-    { "from": "shin-etsu-echizen", "to": "toyota-city", "material": "Finished magnets", "note": "[[VERIFY]]" },
-    { "from": "proterial-japan", "to": "toyota-city", "material": "Finished magnets", "note": "[[VERIFY]]" },
-    { "from": "cyclic-materials", "to": "solvay-la-rochelle", "material": "Recycled mixed RE oxide", "note": "Announced supply agreement. [[VERIFY]]" }
+    {
+      "from": "mt-weld",
+      "to": "lynas-kalgoorlie",
+      "material": "RE concentrate",
+      "note": "Truck/rail to cracking & leaching. [[VERIFY]]"
+    },
+    {
+      "from": "lynas-kalgoorlie",
+      "to": "lamp",
+      "material": "Mixed RE carbonate",
+      "note": "Shipped to Malaysia for separation. [[VERIFY]]"
+    },
+    {
+      "from": "lamp",
+      "to": "proterial-japan",
+      "material": "Separated NdPr oxide",
+      "note": "Japan-bound under JARE/Sojitz framework. [[VERIFY: volumes]]"
+    },
+    {
+      "from": "myanmar-clays",
+      "to": "ganzhou",
+      "material": "Ionic-clay heavy feedstock",
+      "note": "Effectively sole buyer relationship. [[VERIFY: current border flows]]"
+    },
+    {
+      "from": "bayan-obo",
+      "to": "baotou-cluster",
+      "material": "Concentrate",
+      "note": "Integrated Baogang chain. [[VERIFY]]"
+    },
+    {
+      "from": "ganzhou",
+      "to": "jl-mag",
+      "material": "Oxides / metal",
+      "note": "Local heavy-RE supply into magnet production. [[VERIFY]]"
+    },
+    {
+      "from": "jl-mag",
+      "to": "tesla-austin",
+      "material": "Sintered NdFeB magnets",
+      "note": "Reported supplier relationship; licence-gated since Apr 2025. [[VERIFY]]"
+    },
+    {
+      "from": "jl-mag",
+      "to": "byd-shenzhen",
+      "material": "Sintered NdFeB magnets",
+      "note": "[[VERIFY]]"
+    },
+    {
+      "from": "mtn-pass",
+      "to": "mp-fort-worth",
+      "material": "NdPr oxide / metal",
+      "note": "Internal mine-to-magnet chain. [[VERIFY]]"
+    },
+    {
+      "from": "mp-fort-worth",
+      "to": "gm-detroit",
+      "material": "Finished magnets",
+      "note": "GM anchor offtake. [[VERIFY]]"
+    },
+    {
+      "from": "e-vac-sumter",
+      "to": "gm-detroit",
+      "material": "Finished magnets",
+      "note": "GM long-term supply agreement. [[VERIFY]]"
+    },
+    {
+      "from": "serra-verde",
+      "to": "ganzhou",
+      "material": "RE concentrate (MREC)",
+      "note": "Western mine routing to Chinese separation — the structural-deficit visual. [[VERIFY: destination]]"
+    },
+    {
+      "from": "browns-range",
+      "to": "eneabba",
+      "material": "Heavy-RE concentrate (planned)",
+      "note": "Announced offtake. [[VERIFY: status]]"
+    },
+    {
+      "from": "dubbo",
+      "to": "asm-korea",
+      "material": "Oxides (planned)",
+      "note": "ASM integrated strategy. [[VERIFY]]"
+    },
+    {
+      "from": "neo-silmet",
+      "to": "neo-narva",
+      "material": "NdPr oxide/metal",
+      "note": "Neo internal Estonian chain. [[VERIFY]]"
+    },
+    {
+      "from": "shin-etsu-echizen",
+      "to": "toyota-city",
+      "material": "Finished magnets",
+      "note": "[[VERIFY]]"
+    },
+    {
+      "from": "proterial-japan",
+      "to": "toyota-city",
+      "material": "Finished magnets",
+      "note": "[[VERIFY]]"
+    },
+    {
+      "from": "cyclic-materials",
+      "to": "solvay-la-rochelle",
+      "material": "Recycled mixed RE oxide",
+      "note": "Announced supply agreement. [[VERIFY]]"
+    }
   ]
 }
