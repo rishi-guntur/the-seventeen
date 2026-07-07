@@ -14,6 +14,7 @@
     --metal:#c2410c;       /* metal/alloy — orange */
     --magnet:#7c1d1d;      /* magnet — deep red, most dominant */
     --recycle:#15803d;     /* recycling — green */
+    --oem:#0e7490;         /* OEM / downstream demand — teal */
     --policy:#1d4ed8;      /* policy badge ring */
   }
   * { box-sizing: border-box; }
@@ -91,6 +92,14 @@
   .popup-note { color:var(--muted); font-size:12px; margin-top:6px; }
   .verify { color:#b45309; font-weight:600; }
 
+  /* material-flow lines: animated dashes moving source -> destination */
+  .flowline { stroke-dasharray: 6 9; animation: flowdash 1.1s linear infinite; }
+  @keyframes flowdash { to { stroke-dashoffset: -30; } }
+  .popup-flow-title { font-weight:600; color:var(--ink); }
+  .popup-tearsheet dt { font-weight:600; margin-top:5px; font-size:11px;
+        text-transform:uppercase; letter-spacing:.03em; color:var(--muted); }
+  .popup-tearsheet dd { margin:0 0 2px; font-size:12.5px; }
+
   @media (max-width: 640px) {
     #controls { width:62vw; }
     #caption { max-width:80vw; }
@@ -129,8 +138,16 @@
       <span><strong>Isolate ex-China</strong> — hide all Chinese assets</span>
     </label>
 
+    <label class="china-toggle" style="background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8;">
+      <input type="checkbox" id="show-flows" checked>
+      <span><strong>Material flows</strong> — animated offtake/shipment lines</span>
+    </label>
+
     <h2>Chain stage</h2>
     <div id="stage-filters"></div>
+
+    <h2>Asset maturity</h2>
+    <div id="status-filters"></div>
 
     <h2>Element</h2>
     <div id="element-filters"></div>
@@ -151,7 +168,10 @@
     <div class="row"><span class="swatch" style="background:var(--metal)"></span> Metal / alloy</div>
     <div class="row"><span class="swatch big" style="background:var(--magnet)"></span> Magnet (midstream)</div>
     <div class="row"><span class="swatch" style="background:var(--recycle)"></span> Recycling</div>
+    <div class="row"><span class="swatch" style="background:var(--oem)"></span> OEM / downstream demand</div>
     <div class="row"><span class="policy-badge"></span> Blue ring = carries a policy tag (export control / price floor / govt stake / CRMA)</div>
+    <div class="row"><svg width="26" height="8"><line x1="0" y1="4" x2="26" y2="4" stroke="#5b6470" stroke-width="2" stroke-dasharray="5 4"/></svg> Animated dashes = material flow (mine &rarr; downstream); click a line for detail</div>
+    <div class="row"><span class="swatch" style="background:var(--mine); opacity:.45"></span> Faded marker = pre-production (feasibility / construction / care &amp; maintenance)</div>
   </div>
 </div>
 
@@ -163,7 +183,16 @@ const STAGE_COLOR = {
   "separation/refining": "var(--sep)",
   "metal/alloy": "var(--metal)",
   "magnet": "var(--magnet)",
-  "recycling": "var(--recycle)"
+  "recycling": "var(--recycle)",
+  "oem/downstream": "var(--oem)"
+};
+// Asset-maturity → marker opacity: producing reads solid, pipeline reads faded.
+const STATUS_OPACITY = {
+  "producing": 1,
+  "construction": 0.65,
+  "feasibility": 0.45,
+  "care & maintenance": 0.45,
+  "pre-commercial": 0.45
 };
 // resolved hex (CSS vars don't work inside Leaflet's inline SVG/divIcon styles reliably in all browsers, so resolve at runtime)
 function resolveColor(varExpr) {
@@ -175,14 +204,16 @@ const STAGE_RADIUS = {
   "separation/refining": 11,
   "metal/alloy": 8,
   "magnet": 12,
-  "recycling": 7
+  "recycling": 7,
+  "oem/downstream": 8
 };
 const STAGE_LABEL = {
   "deposit/mine": "Deposit / mine",
   "separation/refining": "Separation / refining",
   "metal/alloy": "Metal / alloy",
   "magnet": "Magnet",
-  "recycling": "Recycling"
+  "recycling": "Recycling",
+  "oem/downstream": "OEM / downstream"
 };
 
 document.querySelectorAll('.panel-toggle').forEach(btn => {
@@ -204,8 +235,10 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 
 let allAssets = [];
 let markers = []; // { asset, layer }
+let flowLines = []; // { flow, layer, fromId, toId }
+const assetById = {};
 
-const state = { stages: new Set(), elements: new Set(), policies: new Set() };
+const state = { stages: new Set(), elements: new Set(), policies: new Set(), statuses: new Set() };
 
 function uniqueSorted(arr) { return [...new Set(arr)].sort(); }
 
@@ -238,10 +271,12 @@ function makeIcon(asset) {
   }
   const hasPolicy = asset.policy_tags && asset.policy_tags.length > 0;
   const ring = hasPolicy ? `box-shadow:0 0 0 2.5px ${resolveColor('var(--policy)')};` : '';
+  const op = STATUS_OPACITY[asset.status] ?? 1;
   const size = r * 2 + 6;
   const html = `<div style="
         width:${size}px; height:${size}px; border-radius:50%;
         background:${color}; border:1.5px solid rgba(0,0,0,.25);
+        opacity:${op};
         ${ring} display:flex; align-items:center; justify-content:center;
       "></div>`;
   return L.divIcon({ html, className: '', iconSize: [size, size], iconAnchor: [size/2, size/2] });
@@ -252,41 +287,61 @@ function popupHtml(asset) {
   const tags = (asset.policy_tags || [])
     .map(t => `<span class="popup-policy">${t}</span>`).join('');
   const elements = (asset.elements || []).join(', ');
+  const owner = [asset.company,
+                 asset.ticker ? `(${asset.ticker})` : '',
+                 asset.ownership_type ? `· ${asset.ownership_type.toUpperCase()}` : '']
+                .filter(Boolean).join(' ');
+  const tear = (label, val) => val
+    ? `<dt>${label}</dt><dd>${val}</dd>` : '';
   return `
     <b class="stage-tag" style="background:${color}">${STAGE_LABEL[asset.chain_stage] || asset.chain_stage}</b><br>
     <strong>${asset.name}</strong><br>
-    <span style="color:var(--muted)">${asset.company} — ${asset.country}</span><br>
+    <span style="color:var(--muted)">${owner} — ${asset.country}</span><br>
     <div style="margin-top:6px;"><strong>Status:</strong> ${asset.status}</div>
     ${asset.capacity_tpa ? `<div><strong>Capacity:</strong> ${asset.capacity_tpa.toLocaleString()} t/y REO-eq</div>` : ''}
     <div><strong>Elements:</strong> ${elements || '—'}</div>
     ${tags ? `<div style="margin-top:4px;">${tags}</div>` : ''}
+    <dl class="popup-tearsheet" style="margin:6px 0 0;">
+      ${tear('Offtake', asset.offtake)}
+      ${tear('CapEx / financing', asset.capex_financing)}
+      ${tear('Power', asset.power)}
+      ${tear('Permitting / ESG', asset.permitting_esg)}
+    </dl>
     <div class="popup-note">${asset.notes || ''}</div>
   `;
 }
 
-function applyFilters() {
+function assetVisible(asset) {
   const hideChina = document.getElementById('hide-china').checked;
+  if (hideChina && asset.country === 'China') return false;
+  const stageOk = state.stages.has(asset.chain_stage);
+  const statusOk = state.statuses.has(asset.status);
+  const elementOk = !asset.elements || asset.elements.length === 0 ||
+    asset.elements.some(e => state.elements.has(e));
+  const policyOk = !asset.policy_tags || asset.policy_tags.length === 0 ||
+    asset.policy_tags.some(p => state.policies.has(p));
+  return stageOk && statusOk && elementOk && policyOk;
+}
+
+function applyFilters() {
+  const visibleIds = new Set();
   markers.forEach(({ asset, layer }) => {
-    if (hideChina && asset.country === 'China') {
+    const visible = assetVisible(asset);
+    if (visible) {
+      visibleIds.add(asset.id);
+      if (!map.hasLayer(layer)) layer.addTo(map);
+    } else {
       if (map.hasLayer(layer)) map.removeLayer(layer);
-      return;
     }
-    const stageOk = state.stages.has(asset.chain_stage);
-    const elementOk = !asset.elements || asset.elements.length === 0 ||
-      asset.elements.some(e => state.elements.has(e));
-    const policyOk = !asset.policy_tags || asset.policy_tags.length === 0 ||
-      asset.policy_tags.some(p => state.policies.has(p)) ||
-      // assets with no policy tags should still show unless every policy filter is explicitly used to isolate
-      asset.policy_tags.length === 0;
-    const visible = stageOk && elementOk && policyOk;
-    if (visible) { if (!map.hasLayer(layer)) layer.addTo(map); }
+  });
+  // a flow line shows only when the flows toggle is on AND both endpoints show
+  const showFlows = document.getElementById('show-flows').checked;
+  flowLines.forEach(({ layer, fromId, toId }) => {
+    const on = showFlows && visibleIds.has(fromId) && visibleIds.has(toId);
+    if (on) { if (!map.hasLayer(layer)) layer.addTo(map); }
     else { if (map.hasLayer(layer)) map.removeLayer(layer); }
   });
 }
-
-// Policy filter needs special handling: if an asset has NO policy tags, it should
-// remain visible regardless of policy filter state (policy is an overlay, not exclusionary
-// for assets that simply don't carry any tag) — handled above via the OR clause.
 
 fetch('data/assets.json')
   .then(r => r.json())
@@ -294,29 +349,51 @@ fetch('data/assets.json')
     allAssets = data.assets;
     document.getElementById('last-updated').textContent = data.meta.last_updated;
 
-    const stages = ["deposit/mine", "separation/refining", "metal/alloy", "magnet", "recycling"]
+    const stages = ["deposit/mine", "separation/refining", "metal/alloy", "magnet", "recycling", "oem/downstream"]
       .filter(s => allAssets.some(a => a.chain_stage === s));
+    const statuses = uniqueSorted(allAssets.map(a => a.status));
     const elements = uniqueSorted(allAssets.flatMap(a => a.elements || []));
     const policies = uniqueSorted(allAssets.flatMap(a => a.policy_tags || []));
 
     buildFilterPanel('stage-filters', stages, state.stages, applyFilters,
       (s) => resolveColor(STAGE_COLOR[s] || "var(--mine)"));
+    buildFilterPanel('status-filters', statuses, state.statuses, applyFilters);
     buildFilterPanel('element-filters', elements, state.elements, applyFilters);
     buildFilterPanel('policy-filters', policies, state.policies, applyFilters);
 
     allAssets.forEach(asset => {
+      assetById[asset.id] = asset;
       const layer = L.marker([asset.lat, asset.lng], { icon: makeIcon(asset) })
         .bindPopup(popupHtml(asset));
       markers.push({ asset, layer });
       layer.addTo(map);
     });
 
+    // material-flow polylines (animated dashes; click for detail)
+    (data.flows || []).forEach(flow => {
+      const a = assetById[flow.from], b = assetById[flow.to];
+      if (!a || !b) return;
+      const layer = L.polyline([[a.lat, a.lng], [b.lat, b.lng]], {
+        className: 'flowline',
+        color: resolveColor(STAGE_COLOR[b.chain_stage] || 'var(--mine)'),
+        weight: 2, opacity: 0.55
+      }).bindPopup(`
+        <span class="popup-flow-title">${a.name} &rarr; ${b.name}</span><br>
+        <strong>Material:</strong> ${flow.material}<br>
+        <div class="popup-note">${flow.note || ''}</div>`);
+      flowLines.push({ flow, layer, fromId: flow.from, toId: flow.to });
+      layer.addTo(map);
+    });
+
     document.getElementById('hide-china').addEventListener('change', applyFilters);
+    document.getElementById('show-flows').addEventListener('change', applyFilters);
 
     document.getElementById('reset-filters').addEventListener('click', () => {
       document.querySelectorAll('#controls input[type=checkbox]').forEach(cb => cb.checked = true);
       document.getElementById('hide-china').checked = false;
+      document.getElementById('show-flows').checked = true;
       state.stages = new Set(stages);
+      state.statuses = new Set(statuses);
       state.elements = new Set(elements);
       state.policies = new Set(policies);
       applyFilters();
